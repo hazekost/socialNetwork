@@ -1,57 +1,41 @@
 import React from "react";
-import {NavLink} from "react-router-dom";
 import s from "./Dialogs.module.css"
+import {DialogItem} from "./DialogItem/DialogItem";
+import {Message} from "./Message/Message";
 
-type DialogPropsType = {
-    id: number
-    name: string
+type DialogsPropsType = {
+    messagesPage: {
+        dialogs: Array<{ id: number, name: string }>,
+        messages: Array<{ id: number, message: string }>
+    }
 }
 
-const Dialog: React.FC<DialogPropsType> = (props: DialogPropsType) => {
-    return (
-        <div>
-            <NavLink to={"/dialogs/" + props.id} activeClassName={s.active}>{props.name}</NavLink>
-        </div>
-    )
-}
+export const Dialogs: React.FC<DialogsPropsType> = (props: DialogsPropsType) => {
 
-type MessagePropsType = {
-    message: string
-}
+    const NewMessageElement = React.createRef<HTMLTextAreaElement>()
 
-const Message: React.FC<MessagePropsType> = (props: MessagePropsType) => {
-    return (
-        <div>{props.message}</div>
-    )
-}
-
-export const Dialogs = () => {
-
-    let dialogData = [
-        {id: 1, name: "Konstantin"},
-        {id: 2, name: "Alex"},
-        {id: 3, name: "John"},
-        {id: 4, name: "Ler"}
-    ]
-
-    let messagesData = [
-        {id: 1, message:"Hi"},
-        {id: 2, message:"Yo"},
-        {id: 3, message:"Sup"}
-    ]
+    const addMessage = () => {
+        alert(NewMessageElement.current?.value)
+    }
 
     return (
         <div className={s.dialogs}>
             <div className={s.dialogsItems}>
-                <Dialog id={dialogData[0].id} name={dialogData[0].name}/>
-                <Dialog id={dialogData[1].id} name={dialogData[1].name}/>
-                <Dialog id={dialogData[2].id} name={dialogData[2].name}/>
-                <Dialog id={dialogData[3].id} name={dialogData[3].name}/>
+                {
+                    props.messagesPage.dialogs.map(d => <DialogItem key={d.id} id={d.id} name={d.name}/>)
+                }
             </div>
             <div className={s.messages}>
-                <Message message={messagesData[0].message}/>
-                <Message message={messagesData[1].message}/>
-                <Message message={messagesData[2].message}/>
+                {
+                    props.messagesPage.messages.map(m => <Message key={m.id} message={m.message}/>)
+                }
+                <div>
+                    <textarea ref={NewMessageElement}/>
+                </div>
+                <div>
+                    <button onClick={addMessage}>Add Message</button>
+                </div>
+
             </div>
         </div>
     )

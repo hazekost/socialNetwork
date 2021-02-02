@@ -1,28 +1,40 @@
-import React from "react";
+import React, {ChangeEvent} from "react";
 import s from "./MyPosts.module.css"
 import {Post} from "./Post/Post";
 
-export const MyPosts = () => {
+type MyPostsPropsType = {
+    profilePage: {
+        posts: Array<{ id: number, message: string, likeCount: number }>
+        newPostText: string
+    }
+    addPost: () => void
+    changePostText: (value: string) => void
+}
 
-    let postsData = [
-        {id: 1, message:"Hi", likeCount: 10},
-        {id: 2, message:"Sup",  likeCount: 15}
-    ]
+export const MyPosts: React.FC<MyPostsPropsType> = (props: MyPostsPropsType) => {
+
+    const addPost = () => {
+        props.addPost()
+    }
+    const onChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        props.changePostText(e.currentTarget.value)
+    }
 
     return (
         <div className={s.myPosts}>
             <h3>My Posts</h3>
             <div>
                 <div>
-                    <textarea />
+                    <textarea onChange={onChangeHandler} value={props.profilePage.newPostText}/>
                 </div>
                 <div>
-                    <button>Add Post</button>
+                    <button onClick={addPost}>Add Post</button>
                 </div>
             </div>
             <div className={s.posts}>
-                <Post message={postsData[0].message} likeCount={postsData[0].likeCount}/>
-                <Post message={postsData[1].message} likeCount={postsData[1].likeCount}/>
+                {
+                    props.profilePage.posts.map(p => <Post key={p.id} message={p.message} likeCount={p.likeCount}/>)
+                }
             </div>
         </div>
     )
