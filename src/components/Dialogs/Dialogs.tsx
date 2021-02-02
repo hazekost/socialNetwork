@@ -1,21 +1,39 @@
-import React from "react";
+import React, {ChangeEvent} from "react";
 import s from "./Dialogs.module.css"
 import {DialogItem} from "./DialogItem/DialogItem";
 import {Message} from "./Message/Message";
 
+type AddPostActionType = {
+    type: "ADD-POST"
+}
+type AddMessageActionType = {
+    type: "ADD-MESSAGE"
+}
+type ChangePostTextActionType = {
+    type: "CHANGE-POST-TEXT"
+    value: string
+}
+type ChangeMessageTextActionType = {
+    type: "CHANGE-MESSAGE-TEXT"
+    value: string
+}
+type ActionType = AddPostActionType|AddMessageActionType|ChangePostTextActionType|ChangeMessageTextActionType
 type DialogsPropsType = {
     messagesPage: {
         dialogs: Array<{ id: number, name: string }>,
-        messages: Array<{ id: number, message: string }>
+        messages: Array<{ id: number, message: string }>,
+        newMessageText: string
     }
+    dispatch: (action: ActionType) => void
 }
 
 export const Dialogs: React.FC<DialogsPropsType> = (props: DialogsPropsType) => {
 
-    const NewMessageElement = React.createRef<HTMLTextAreaElement>()
-
+    const onChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        props.dispatch({type: "CHANGE-MESSAGE-TEXT", value:e.currentTarget.value})
+    }
     const addMessage = () => {
-        alert(NewMessageElement.current?.value)
+        props.dispatch({type: "ADD-MESSAGE"})
     }
 
     return (
@@ -30,7 +48,7 @@ export const Dialogs: React.FC<DialogsPropsType> = (props: DialogsPropsType) => 
                     props.messagesPage.messages.map(m => <Message key={m.id} message={m.message}/>)
                 }
                 <div>
-                    <textarea ref={NewMessageElement}/>
+                    <textarea onChange={onChangeHandler} value={props.messagesPage.newMessageText}/>
                 </div>
                 <div>
                     <button onClick={addMessage}>Add Message</button>
