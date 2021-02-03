@@ -1,19 +1,5 @@
-type AddPostActionType = {
-    type: "ADD-POST"
-}
-type AddMessageActionType = {
-    type: "ADD-MESSAGE"
-}
-type ChangePostTextActionType = {
-    type: "CHANGE-POST-TEXT"
-    value: string
-}
-type ChangeMessageTextActionType = {
-    type: "CHANGE-MESSAGE-TEXT"
-    value: string
-}
-type ActionType = AddPostActionType|AddMessageActionType|ChangePostTextActionType|ChangeMessageTextActionType
-type storeType = {
+/*
+type StoreType = {
     _state: {
         profilePage: {
             posts: Array<{ id: number, message: string, likeCount: number }>
@@ -41,7 +27,7 @@ type storeType = {
     dispatch: (action: ActionType) => void
 }
 
-export let store: storeType = {
+let store: StoreType = {
     _state: {
         profilePage: {
             posts: [
@@ -74,25 +60,10 @@ export let store: storeType = {
         return this._state
     },
     dispatch(action) {
-        if (action.type === "ADD-POST") {
-            let newPost = {id: 3, message: this._state.profilePage.newPostText, likeCount: 0}
-            this._state.profilePage.posts.push(newPost)
-            this._state.profilePage.newPostText = ""
-            this._callSubscriber()
-        }
-        if (action.type === "ADD-MESSAGE") {
-            let newMessage = {id: 4, message: this._state.messagesPage.newMessageText}
-            this._state.messagesPage.messages.push(newMessage)
-            this._state.messagesPage.newMessageText = ""
-            this._callSubscriber()
-        }
-        if (action.type === "CHANGE-POST-TEXT") {
-            this._state.profilePage.newPostText = action.value
-            this._callSubscriber()
-        }
-        if (action.type === "CHANGE-MESSAGE-TEXT") {
-            this._state.messagesPage.newMessageText = action.value
-            this._callSubscriber()
-        }
+        profileReducer(this._state.profilePage, action)
+        dialogsReducer(this._state.messagesPage, action)
+        this._callSubscriber()
     }
-}
+}*/
+
+export const fuck = () => {}
