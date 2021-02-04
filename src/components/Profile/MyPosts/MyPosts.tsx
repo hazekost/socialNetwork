@@ -3,8 +3,8 @@ import s from "./MyPosts.module.css"
 import {Post} from "./Post/Post";
 
 type MyPostsPropsType = {
-    addPost: () => void
-    changePostText: (value: string) => void
+    AddPost: () => void
+    ChangePostText: (value: string) => void
     state: {
         posts: Array<{ id: number, message: string, likeCount: number }>
         newPostText: string
@@ -14,10 +14,10 @@ type MyPostsPropsType = {
 export const MyPosts: React.FC<MyPostsPropsType> = (props: MyPostsPropsType) => {
 
     const onChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        props.changePostText(e.currentTarget.value)
+        props.ChangePostText(e.currentTarget.value)
     }
     const addPost = () => {
-        props.addPost()
+        props.AddPost()
     }
 
     return (

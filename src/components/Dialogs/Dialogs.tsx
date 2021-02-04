@@ -4,8 +4,8 @@ import {DialogItem} from "./DialogItem/DialogItem";
 import {Message} from "./Message/Message";
 
 type DialogsPropsType = {
-    addMessage: () => void
-    changeMessageText: (value: string) => void
+    AddMessage: () => void
+    ChangeMessageText: (value: string) => void
     state: {
         dialogs: Array<{ id: number, name: string }>
         messages: Array<{ id: number, message: string }>
@@ -13,13 +13,13 @@ type DialogsPropsType = {
     }
 }
 
-export const Dialogs: React.FC<DialogsPropsType> = (props: DialogsPropsType) => {
+export const Dialogs: React.FC<DialogsPropsType> = (props) => {
 
     const onChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        props.changeMessageText(e.currentTarget.value)
+        props.ChangeMessageText(e.currentTarget.value)
     }
     const addMessage = () => {
-        props.addMessage()
+        props.AddMessage()
     }
 
     return (

@@ -1,4 +1,4 @@
-import {AddPostAC, ChangePostTextAC} from "../../../Redux/profileReducer";
+import {AddPost, ChangePostText} from "../../../Redux/profileReducer";
 import {MyPosts} from "./MyPosts";
 import {connect} from "react-redux";
 import {rootStateType} from "../../../Redux/reduxStore";
@@ -20,7 +20,4 @@ const mapStateToProps = (state: rootStateType) => {
 //     }
 // }
 
-export const MyPostsContainer = connect(mapStateToProps, {
-    changePostText: ChangePostTextAC,
-    addPost: AddPostAC
-})(MyPosts)
+export const MyPostsContainer = connect(mapStateToProps, {ChangePostText, AddPost})(MyPosts)

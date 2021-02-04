@@ -1,4 +1,4 @@
-import {AddMessageAC, ChangeMessageTextAC} from "../../Redux/dialogsReducer";
+import {AddMessage, ChangeMessageText} from "../../Redux/dialogsReducer";
 import {Dialogs} from "./Dialogs";
 import {connect} from "react-redux";
 import {rootStateType} from "../../Redux/reduxStore";
@@ -19,7 +19,4 @@ const mapStateToProps = (state: rootStateType) => {
 //     }
 // }
 
-export const DialogsContainer = connect(mapStateToProps, {
-    addMessage: AddMessageAC,
-    changeMessageText: ChangeMessageTextAC
-})(Dialogs)
+export const DialogsContainer = connect(mapStateToProps, {AddMessage, ChangeMessageText})(Dialogs)
