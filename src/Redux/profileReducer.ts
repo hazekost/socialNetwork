@@ -1,12 +1,3 @@
-import {AddMessageActionType, ChangeMessageTextActionType} from "./dialogsReducer";
-import {
-    followReturnType,
-    setCurrentPageReturnType, setFetchingReturnType,
-    setTotalUsersCountReturnType,
-    setUsersReturnType,
-    unFollowReturnType
-} from "./usersReducer";
-
 type AddPostActionReturnType = {
     type: "ADD-POST"
 }
@@ -18,37 +9,25 @@ type setUserProfileReturnType = {
     type: "SET-USER-PROFILE"
     profile: userProfileType
 }
-
-export type ActionType =
-    AddPostActionReturnType
-    | ChangePostTextActionReturnType
-    | AddMessageActionType
-    | ChangeMessageTextActionType
-    | setUsersReturnType
-    | unFollowReturnType
-    | followReturnType
-    | setCurrentPageReturnType
-    | setTotalUsersCountReturnType
-    | setFetchingReturnType
-    | setUserProfileReturnType
+type ActionType = AddPostActionReturnType|ChangePostTextActionReturnType|setUserProfileReturnType
 export type userProfileType = {
-    aboutMe: string,
+    aboutMe: string
     contacts: {
-        facebook: string,
-        website: string,
-        vk: string,
-        twitter: string,
-        instagram: string,
-        youtube: string,
-        github: string,
+        facebook: string
+        website: string
+        vk: string
+        twitter: string
+        instagram: string
+        youtube: string
+        github: string
         mainLink: string
-    },
-    lookingForAJob: boolean,
-    lookingForAJobDescription: string,
-    fullName: string,
-    userId: number,
+    }
+    lookingForAJob: boolean
+    lookingForAJobDescription: string
+    fullName: string
+    userId: number
     photos: {
-        small: string,
+        small: string
         large: string
     }
 }

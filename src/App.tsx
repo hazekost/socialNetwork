@@ -1,20 +1,20 @@
 import React from 'react';
 import './App.css';
-import {Header} from "./components/Header/Header";
 import {Navbar} from "./components/Navbar/Navbar";
 import {BrowserRouter, Route} from "react-router-dom";
 import UsersContainer from "./components/Users/UsersContainer";
 import {DialogsContainer} from "./components/Dialogs/DialogsContainer";
-import ProfileContainer from "./components/Profile/ProfileContainer";
+import ProfileContainerWithRouter from "./components/Profile/ProfileContainer";
+import HeaderContainer from "./components/Header/HeaderConstainer";
 
 function App() {
     return (
         <BrowserRouter>
             <div className={"app"}>
-                <Header/>
+                <HeaderContainer/>
                 <Navbar/>
                 <div className={"app-content"}>
-                    <Route path={"/profile"} render={() => <ProfileContainer/>}
+                    <Route  path={"/profile/:userId?"} render={() => <ProfileContainerWithRouter/>}
                     />
                     <Route path={"/dialogs"}
                            render={() => <DialogsContainer />}

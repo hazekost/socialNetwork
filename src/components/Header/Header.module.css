@@ -8,3 +8,11 @@
     border-radius: 30px;
     padding: 5px;
 }
+.loginBlock {
+    float: right;
+    margin-right: 5px;
+}
+.loginBlock a {
+    text-decoration: none;
+    color: black;
+}

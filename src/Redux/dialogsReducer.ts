@@ -1,12 +1,11 @@
-import {ActionType} from "./profileReducer";
-
-export type AddMessageActionType = {
+type AddMessageActionType = {
     type: "ADD-MESSAGE"
 }
-export type ChangeMessageTextActionType = {
+type ChangeMessageTextActionType = {
     type: "CHANGE-MESSAGE-TEXT"
     value: string
 }
+type ActionType = AddMessageActionType|ChangeMessageTextActionType
 type initialStateType = {
     dialogs: Array<{ id: number, name: string }>
     messages: Array<{ id: number, message: string }>
