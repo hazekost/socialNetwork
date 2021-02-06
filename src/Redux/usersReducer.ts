@@ -1,4 +1,7 @@
-type followReturnType = {
+import {networkAPI} from "../api/api";
+import {Dispatch} from "redux";
+
+type followUnfollowReturnType = {
     type: "FOLLOW"
     userID: number
 }
@@ -27,11 +30,11 @@ type setFollowingReturnType = {
     userId: number
     isFetching: boolean
 }
-type ActionType = followReturnType|unFollowReturnType|setUsersReturnType|setFollowingReturnType
-    |setCurrentPageReturnType|setTotalUsersCountReturnType|setFetchingReturnType
+type ActionType = followUnfollowReturnType | unFollowReturnType | setUsersReturnType | setFollowingReturnType
+    | setCurrentPageReturnType | setTotalUsersCountReturnType | setFetchingReturnType
 export type userType = {
     id: number
-    photos: {small: string, large: string}
+    photos: { small: string, large: string }
     followed: boolean
     name: string
     status: string
@@ -70,15 +73,17 @@ export const usersReducer = (state: initialStateType = initialState, action: Act
         case "SET-FETCHING":
             return {...state, isFetching: action.isFetching}
         case "TOGGLE-FOLLOWING":
-            return {...state, followingInProgress: action.isFetching
+            return {
+                ...state, followingInProgress: action.isFetching
                     ? [...state.followingInProgress, action.userId]
-                    : state.followingInProgress.filter(id => id !== action.userId)}
+                    : state.followingInProgress.filter(id => id !== action.userId)
+            }
         default:
             return state
     }
 }
 
-export const follow = (userID: number): followReturnType => {
+export const follow = (userID: number): followUnfollowReturnType => {
     return {
         type: "FOLLOW",
         userID
@@ -102,7 +107,7 @@ export const setCurrentPage = (currentPage: number): setCurrentPageReturnType =>
         currentPage
     }
 }
-export const setUsersCount = (totalCount: number): setTotalUsersCountReturnType => {
+const setUsersCount = (totalCount: number): setTotalUsersCountReturnType => {
     return {
         type: "SET-TOTAL-USERS-COUNT",
         totalCount
@@ -119,5 +124,41 @@ export const setFollowing = (userId: number, isFetching: boolean): setFollowingR
         type: "TOGGLE-FOLLOWING",
         userId,
         isFetching
+    }
+}
+
+export const getUsers = (currentPage: number, pageSize: number) => {
+    return (dispatch: Dispatch<ActionType>) => {
+        dispatch(setCurrentPage(currentPage))
+        dispatch(setFetching(true))
+        networkAPI.getUsers(currentPage, pageSize).then(response => {
+            dispatch(setFetching(false))
+            dispatch(setUsers(response.data.items))
+            dispatch(setUsersCount(response.data.totalCount))
+        })
+    }
+}
+
+export const userUnFollow = (userId: number) => {
+    return (dispatch: Dispatch<ActionType>) => {
+        dispatch(setFollowing(userId, true))
+        networkAPI.unFollow(userId).then((response) => {
+            if (response.data.resultCode === 0) {
+                dispatch(unFollow(userId))
+            }
+            dispatch(setFollowing(userId, false))
+        })
+    }
+}
+
+export const userFollow = (userId: number) => {
+    return (dispatch: Dispatch<ActionType>) => {
+        dispatch(setFollowing(userId, true))
+        networkAPI.follow(userId).then((response) => {
+            if (response.data.resultCode === 0) {
+                dispatch(follow(userId))
+            }
+            dispatch(setFollowing(userId, false))
+        })
     }
 }

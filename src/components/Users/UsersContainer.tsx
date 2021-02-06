@@ -1,18 +1,9 @@
 import {connect} from "react-redux";
 import {rootStateType} from "../../Redux/reduxStore";
-import {
-    follow,
-    setCurrentPage,
-    setFetching, setFollowing,
-    setUsers,
-    setUsersCount,
-    unFollow,
-    userType
-} from "../../Redux/usersReducer";
+import {follow, getUsers, setFollowing, unFollow, userFollow, userType, userUnFollow} from "../../Redux/usersReducer";
 import React from "react";
 import {Users} from "./Users";
 import {Preloader} from "../common/Preloader/Preloader";
-import {networkAPI} from "../../api/api";
 
 type UsersPropsType = {
     users: Array<userType>
@@ -21,32 +12,30 @@ type UsersPropsType = {
     currentPage: number
     isFetching: boolean
     followingInProgress: Array<number>
-    follow: (userID: number) => void
-    unFollow: (userID: number) => void
-    setUsers: (users: Array<userType>) => void
-    setCurrentPage: (currentPage: number) => void
-    setUsersCount: (usersCount: number) => void
-    setFetching: (isFetching: boolean) => void
-    setFollowing: (userId: number, isFetching: boolean) => void
+    getUsers: (currentPage: number, pageSize: number) => void
+    userFollow: (userId: number) => void
+    userUnFollow: (userId: number) => void
 }
 
 class UsersContainer extends React.Component<UsersPropsType> {
     componentDidMount() {
-        this.props.setFetching(true)
-        networkAPI.getUsers(this.props.currentPage, this.props.pageSize).then(response => {
-            this.props.setFetching(false)
-            this.props.setUsers(response.data.items)
-            this.props.setUsersCount(response.data.totalCount)
-        })
+        this.props.getUsers(this.props.currentPage, this.props.pageSize)
+        // this.props.setFetching(true)
+        // networkAPI.getUsers(this.props.currentPage, this.props.pageSize).then(response => {
+        //     this.props.setFetching(false)
+        //     this.props.setUsers(response.data.items)
+        //     this.props.setUsersCount(response.data.totalCount)
+        // })
     }
 
     onPageChanged = (pageNumber: number) => {
-        this.props.setCurrentPage(pageNumber)
-        this.props.setFetching(true)
-        networkAPI.getUsers(pageNumber, this.props.pageSize).then(response => {
-            this.props.setFetching(false)
-            this.props.setUsers(response.data.items)
-        })
+        this.props.getUsers(pageNumber, this.props.pageSize)
+        // this.props.setCurrentPage(pageNumber)
+        // this.props.setFetching(true)
+        // networkAPI.getUsers(pageNumber, this.props.pageSize).then(response => {
+        //     this.props.setFetching(false)
+        //     this.props.setUsers(response.data.items)
+        // })
     }
 
     render() {
@@ -55,13 +44,12 @@ class UsersContainer extends React.Component<UsersPropsType> {
             <Users
                 users={this.props.users}
                 followingInProgress={this.props.followingInProgress}
-                setFollowing={this.props.setFollowing}
                 totalCount={this.props.totalCount}
                 currentPage={this.props.currentPage}
                 pageSize={this.props.pageSize}
-                follow={this.props.follow}
-                unFollow={this.props.unFollow}
                 onPageChanged={this.onPageChanged}
+                userFollow={this.props.userFollow}
+                userUnFollow={this.props.userUnFollow}
             />
         </>
     }
@@ -79,7 +67,7 @@ const mapStateToProps = (state: rootStateType) => {
 }
 
 export default connect(mapStateToProps, {
-    follow, unFollow, setUsers, setCurrentPage, setUsersCount, setFetching, setFollowing
+    follow, unFollow, setFollowing, getUsers, userFollow, userUnFollow
 })(UsersContainer)
 
 

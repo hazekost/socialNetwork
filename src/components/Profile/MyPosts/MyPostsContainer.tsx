@@ -9,6 +9,9 @@ const mapStateToProps = (state: rootStateType) => {
         state: state.profilePage
     }
 }
+
+export const MyPostsContainer = connect(mapStateToProps, {ChangePostText, AddPost})(MyPosts)
+
 // const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => {
 //     return {
 //         changePostText: (value: string) => {
@@ -19,5 +22,3 @@ const mapStateToProps = (state: rootStateType) => {
 //         }
 //     }
 // }
-
-export const MyPostsContainer = connect(mapStateToProps, {ChangePostText, AddPost})(MyPosts)

@@ -1,3 +1,6 @@
+import {Dispatch} from "redux";
+import {networkAPI} from "../api/api";
+
 type AddPostActionReturnType = {
     type: "ADD-POST"
 }
@@ -70,7 +73,15 @@ export const ChangePostText = (value: string): ChangePostTextActionReturnType =>
 export const AddPost = (): AddPostActionReturnType => ({
     type: "ADD-POST"
 })
-export const SetUserProfile = (profile: userProfileType): setUserProfileReturnType => ({
+const SetUserProfile = (profile: userProfileType): setUserProfileReturnType => ({
     type: "SET-USER-PROFILE",
     profile
 })
+
+export const getUserProfile = (userId: string) => {
+    return (dispatch: Dispatch<ActionType>) => {
+        networkAPI.getUserProfile(userId).then(response => {
+            dispatch(SetUserProfile(response.data))
+        })
+    }
+}
