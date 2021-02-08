@@ -4,6 +4,8 @@ import {follow, getUsers, setFollowing, unFollow, userFollow, userType, userUnFo
 import React from "react";
 import {Users} from "./Users";
 import {Preloader} from "../common/Preloader/Preloader";
+import {withAuthRedirect} from "../../hoc/withAuthRedirect";
+import {compose} from "redux";
 
 type UsersPropsType = {
     users: Array<userType>
@@ -20,22 +22,10 @@ type UsersPropsType = {
 class UsersContainer extends React.Component<UsersPropsType> {
     componentDidMount() {
         this.props.getUsers(this.props.currentPage, this.props.pageSize)
-        // this.props.setFetching(true)
-        // networkAPI.getUsers(this.props.currentPage, this.props.pageSize).then(response => {
-        //     this.props.setFetching(false)
-        //     this.props.setUsers(response.data.items)
-        //     this.props.setUsersCount(response.data.totalCount)
-        // })
     }
 
     onPageChanged = (pageNumber: number) => {
         this.props.getUsers(pageNumber, this.props.pageSize)
-        // this.props.setCurrentPage(pageNumber)
-        // this.props.setFetching(true)
-        // networkAPI.getUsers(pageNumber, this.props.pageSize).then(response => {
-        //     this.props.setFetching(false)
-        //     this.props.setUsers(response.data.items)
-        // })
     }
 
     render() {
@@ -66,31 +56,9 @@ const mapStateToProps = (state: rootStateType) => {
     }
 }
 
-export default connect(mapStateToProps, {
+export default compose<React.ComponentType>(connect(mapStateToProps, {
     follow, unFollow, setFollowing, getUsers, userFollow, userUnFollow
-})(UsersContainer)
-
-
-// const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => {
-//     return {
-//         follow: (userID: number) => {
-//             dispatch(followAC(userID))
-//         },
-//         unFollow: (userID: number) => {
-//             dispatch(unFollowAC(userID))
-//         },
-//         setUsers: (users: Array<userType>) => {
-//             dispatch(setUsersAC(users))
-//         },
-//         setCurrentPage: (currentPage: number) => {
-//             dispatch(setCurrentPageAC(currentPage))
-//         },
-//         setUsersCount: (usersCount: number) => {
-//             dispatch(setUsersCountAC(usersCount))
-//         },
-//         setFetching: (isFetching: boolean) => {
-//             dispatch(setFetchingAC(isFetching))
-//         }
-//     }
-// }
+    }),
+    withAuthRedirect
+)(UsersContainer)
 

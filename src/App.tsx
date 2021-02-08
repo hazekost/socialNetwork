@@ -2,11 +2,11 @@ import React from 'react';
 import './App.css';
 import {Navbar} from "./components/Navbar/Navbar";
 import {BrowserRouter, Route} from "react-router-dom";
-import UsersContainer from "./components/Users/UsersContainer";
-import {DialogsContainer} from "./components/Dialogs/DialogsContainer";
-import ProfileContainerWithRouter from "./components/Profile/ProfileContainer";
+import DialogsContainer from "./components/Dialogs/DialogsContainer";
+import ProfileContainer from "./components/Profile/ProfileContainer";
 import HeaderContainer from "./components/Header/HeaderConstainer";
 import {Login} from "./components/Login/Login";
+import UsersContainer from "./components/Users/UsersContainer";
 
 function App() {
     return (
@@ -15,7 +15,7 @@ function App() {
                 <HeaderContainer/>
                 <Navbar/>
                 <div className={"app-content"}>
-                    <Route  path={"/profile/:userId?"} render={() => <ProfileContainerWithRouter/>}
+                    <Route  path={"/profile/:userId?"} render={() => <ProfileContainer/>}
                     />
                     <Route path={"/dialogs"}
                            render={() => <DialogsContainer />}
