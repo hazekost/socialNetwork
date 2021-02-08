@@ -1,6 +1,6 @@
 import {setFetching, setFetchingReturnType} from "./usersReducer";
 import {Dispatch} from "redux";
-import {networkAPI} from "../api/api";
+import {networkAPI} from "../api/networkAPI";
 
 type setAuthReturnType = {
     type: "SET-AUTH"

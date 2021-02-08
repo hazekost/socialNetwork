@@ -1,4 +1,4 @@
-import {networkAPI} from "../api/api";
+import {networkAPI} from "../api/networkAPI";
 import {Dispatch} from "redux";
 
 type followUnfollowReturnType = {

@@ -54,7 +54,7 @@ export const networkAPI = {
     getUsers(currentPage: number, pageSize: number) {
         return instance.get<getUsersReturnType>(`users?page=${currentPage}&count=${pageSize}`)
     },
-    getUserProfile(userId: string) {
+    getProfile(userId: string) {
         return instance.get<getUserProfileReturnType>(`profile/${userId}`)
     },
     getAuth() {
@@ -64,6 +64,6 @@ export const networkAPI = {
         return instance.post<followUnFollowReturnType>(`follow/${userId}`)
     },
     unFollow(userId: number) {
-        return instance.delete<followUnFollowReturnType>(`follow/${userId}`, {})
+        return instance.delete<followUnFollowReturnType>(`follow/${userId}`)
     }
 }
