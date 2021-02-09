@@ -6,7 +6,9 @@ import noImage from "../../../assets/images/noImage.png"
 import {ProfileStatus} from "./ProfileStatus";
 
 type ProfileInfoPropsType = {
-    profile: userProfileType | null
+    profile: userProfileType|null
+    status: string
+    updateStatus: (status: string) => void
 }
 
 export const ProfileInfo: React.FC<ProfileInfoPropsType> = (props) => {
@@ -19,9 +21,9 @@ export const ProfileInfo: React.FC<ProfileInfoPropsType> = (props) => {
             {!props.profile && <Preloader/>}
             <div className={s.description}>
                 <img src={props.profile?.photos.large === null ? noImage : props.profile?.photos.large}/>
-                <ProfileStatus status={"Hello"}/>
-                <div>{props.profile?.fullName}</div>
-                <div>{props.profile?.aboutMe}</div>
+                <ProfileStatus status={props.status} updateStatus={props.updateStatus}/>
+                <div>Name: {props.profile?.fullName}</div>
+                <div>About Me: {props.profile?.aboutMe}</div>
             </div>
         </div>
     )

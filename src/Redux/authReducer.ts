@@ -6,7 +6,11 @@ type setAuthReturnType = {
     type: "SET-AUTH"
     data: dataType
 }
-type ActionType = setAuthReturnType | setFetchingReturnType
+type authLoginReturnType = {
+    type: "LOGIN"
+    isAuth: boolean
+}
+type ActionType = setAuthReturnType | setFetchingReturnType | authLoginReturnType
 export type dataType = {
     id: number
     login: string
@@ -33,6 +37,8 @@ export const authReducer = (state: initialStateType = initialState, action: Acti
             return {...state, ...action.data, isAuth: true}
         case "SET-FETCHING":
             return {...state, isFetching: action.isFetching}
+        case "LOGIN":
+            return {...state, isAuth: action.isAuth}
         default:
             return state
     }
@@ -44,6 +50,12 @@ const setAuth = (data: dataType): setAuthReturnType => {
         data
     }
 }
+const authLogin = (auth: boolean): authLoginReturnType => {
+    return {
+        type: "LOGIN",
+        isAuth: auth
+    }
+}
 
 export const getAuth = () => {
     return (dispatch: Dispatch<ActionType>) => {
@@ -52,6 +64,15 @@ export const getAuth = () => {
             dispatch(setFetching(false))
             if (response.data.resultCode === 0) {
                 dispatch(setAuth(response.data.data))
+            }
+        })
+    }
+}
+export const getAuthLogin = (email: string, password: string, rememberMe: boolean) => {
+    return (dispatch: Dispatch<ActionType>) => {
+        networkAPI.logIn(email, password, rememberMe).then((response) => {
+            if (response.data.resultCode === 0) {
+                dispatch(authLogin(true))
             }
         })
     }

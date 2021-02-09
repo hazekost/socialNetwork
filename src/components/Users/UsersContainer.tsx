@@ -59,6 +59,6 @@ const mapStateToProps = (state: rootStateType) => {
 export default compose<React.ComponentType>(connect(mapStateToProps, {
     follow, unFollow, setFollowing, getUsers, userFollow, userUnFollow
     }),
-    withAuthRedirect
+    /*withAuthRedirect*/
 )(UsersContainer)
 

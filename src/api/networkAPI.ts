@@ -36,7 +36,7 @@ type getUserProfileReturnType = {
     }
     userId: number
 }
-type followUnFollowReturnType = {
+type followUnFollowUpdateStatusLoginReturnType = {
     resultCode: number
     messages: Array<string>
     data: {}
@@ -61,9 +61,18 @@ export const networkAPI = {
         return instance.get<AuthReturnType>("auth/me")
     },
     follow(userId: number) {
-        return instance.post<followUnFollowReturnType>(`follow/${userId}`)
+        return instance.post<followUnFollowUpdateStatusLoginReturnType>(`follow/${userId}`)
     },
     unFollow(userId: number) {
-        return instance.delete<followUnFollowReturnType>(`follow/${userId}`)
+        return instance.delete<followUnFollowUpdateStatusLoginReturnType>(`follow/${userId}`)
+    },
+    getStatus(userId: string) {
+        return instance.get<string>(`profile/status/${userId}`)
+    },
+    updateStatus(status: string) {
+        return instance.put<followUnFollowUpdateStatusLoginReturnType>(`profile/status`, {status})
+    },
+    logIn(email: string, password: string, rememberMe: boolean) {
+        return instance.post<followUnFollowUpdateStatusLoginReturnType>(`auth/login`, {email, password, rememberMe})
     }
 }

@@ -12,7 +12,11 @@ type setUserProfileReturnType = {
     type: "SET-USER-PROFILE"
     profile: userProfileType
 }
-type ActionType = AddPostActionReturnType|ChangePostTextActionReturnType|setUserProfileReturnType
+type setUserStatusReturnType = {
+    type: "SET-USER-STATUS",
+    status: string
+}
+type ActionType = AddPostActionReturnType|ChangePostTextActionReturnType|setUserProfileReturnType|setUserStatusReturnType
 export type userProfileType = {
     aboutMe: string
     contacts: {
@@ -38,6 +42,7 @@ type initialStateType = {
     posts: Array<{ id: number, message: string, likeCount: number }>
     newPostText: string
     profile: userProfileType | null
+    userStatus: string
 }
 
 let initialState: initialStateType = {
@@ -46,7 +51,8 @@ let initialState: initialStateType = {
         {id: 2, message: "Sup", likeCount: 15}
     ],
     newPostText: "",
-    profile: null
+    profile: null,
+    userStatus: ""
 }
 
 export const profileReducer = (state: initialStateType = initialState, action: ActionType): initialStateType => {
@@ -61,6 +67,8 @@ export const profileReducer = (state: initialStateType = initialState, action: A
             return {...state, newPostText: action.value}
         case "SET-USER-PROFILE":
             return {...state, profile: action.profile}
+        case "SET-USER-STATUS":
+            return {...state, userStatus: action.status}
         default:
             return state
     }
@@ -77,11 +85,31 @@ const SetUserProfile = (profile: userProfileType): setUserProfileReturnType => (
     type: "SET-USER-PROFILE",
     profile
 })
+const SetUserStatus = (status: string): setUserStatusReturnType => ({
+    type: "SET-USER-STATUS",
+    status
+})
 
 export const getProfile = (userId: string) => {
     return (dispatch: Dispatch<ActionType>) => {
         networkAPI.getProfile(userId).then(response => {
             dispatch(SetUserProfile(response.data))
+        })
+    }
+}
+export const getStatus = (userId: string) => {
+    return (dispatch: Dispatch<ActionType>) => {
+        networkAPI.getStatus(userId).then(response => {
+            dispatch(SetUserStatus(response.data))
+        })
+    }
+}
+export const updateStatus = (status: string) => {
+    return (dispatch: Dispatch<ActionType>) => {
+        networkAPI.updateStatus(status).then(response => {
+            if (response.data.resultCode === 0) {
+                dispatch(SetUserStatus(status))
+            }
         })
     }
 }
