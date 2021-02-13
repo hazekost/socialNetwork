@@ -1,7 +1,7 @@
 import React from "react";
-import {reduxForm, Field, InjectedFormProps} from "redux-form"
-import {getAuthLogin} from "../../Redux/authReducer";
-import {connect} from "react-redux";
+import {Field, InjectedFormProps, reduxForm} from "redux-form"
+import {Input} from "../common/FormsControls/FormsControls";
+import {required} from "../../utils/validators/validators";
 
 type FormDataType = {
     email: string
@@ -13,13 +13,13 @@ const LoginForm: React.FC<InjectedFormProps<FormDataType>> = (props) => {
     return (
         <form onSubmit={props.handleSubmit}>
             <div>
-                <Field placeholder={"Login"} name={"login"} component={"input"}/>
+                <Field placeholder={"Login"} validate={[required]} name={"email"} component={Input}/>
             </div>
             <div>
-                <Field placeholder={"Password"} name={"password"} component={"input"}/>
+                <Field placeholder={"Password"} validate={[required]} name={"password"} component={Input}/>
             </div>
             <div>
-                <Field component={"input"} name={"rememberMe"} type={"checkbox"}/> remember me
+                <Field component={Input} validate={[required]} name={"rememberMe"} type={"checkbox"}/> remember me
             </div>
             <div>
                 <button>LogIn</button>
@@ -30,16 +30,12 @@ const LoginForm: React.FC<InjectedFormProps<FormDataType>> = (props) => {
 
 const ReduxLoginForm = reduxForm<FormDataType>({form: "Login"})(LoginForm)
 
-type PropsType = {
-    getAuthLogin: (a: string, b: string, c: boolean) => void
-}
+export const Login = () => {
 
-export const Login: React.FC<PropsType> = (props) => {
     const onSubmit = (formData: FormDataType) => {
-        let {email, password, rememberMe} = formData
         console.log(formData)
-        props.getAuthLogin(email, password, rememberMe)
     }
+
     return (
         <div>
             <h1>Login</h1>
@@ -47,10 +43,3 @@ export const Login: React.FC<PropsType> = (props) => {
         </div>
     )
 }
-
-const mapStateToProps = () => {
-    return {}
-}
-
-
-export default connect(mapStateToProps, {getAuthLogin})(Login)

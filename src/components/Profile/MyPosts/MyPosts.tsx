@@ -1,36 +1,48 @@
-import React, {ChangeEvent} from "react";
+import React from "react";
 import s from "./MyPosts.module.css"
 import {Post} from "./Post/Post";
+import {reduxForm, Field, InjectedFormProps} from "redux-form";
+import {maxLengthCreator, required} from "../../../utils/validators/validators";
+import {Textarea} from "../../common/FormsControls/FormsControls";
 
 type MyPostsPropsType = {
-    AddPost: () => void
-    ChangePostText: (value: string) => void
+    AddPost: (value: string) => void
     state: {
         posts: Array<{ id: number, message: string, likeCount: number }>
-        newPostText: string
     }
 }
+type formDataType = {
+    newPostText: string
+}
+
+const maxLength = maxLengthCreator(10)
+
+const AddPostForm: React.FC<InjectedFormProps<formDataType>> = (props) => {
+    return (
+        <form onSubmit={props.handleSubmit}>
+            <div>
+                <Field component={Textarea} name={"newPostText"} placeholder={"Post Message"}
+                       validate={[required, maxLength]}/>
+            </div>
+            <div>
+                <button>Send</button>
+            </div>
+        </form>
+    )
+}
+
+const AddPostFormRedux = reduxForm<formDataType>({form: "profileAddPostForm"})(AddPostForm)
 
 export const MyPosts: React.FC<MyPostsPropsType> = (props: MyPostsPropsType) => {
 
-    const onChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        props.ChangePostText(e.currentTarget.value)
-    }
-    const addPost = () => {
-        props.AddPost()
+    const addPost = (formData: formDataType) => {
+        props.AddPost(formData.newPostText)
     }
 
     return (
         <div className={s.myPosts}>
             <h3>My Posts</h3>
-            <div>
-                <div>
-                    <textarea onChange={onChangeHandler} value={props.state.newPostText}/>
-                </div>
-                <div>
-                    <button onClick={addPost}>Add Post</button>
-                </div>
-            </div>
+            <AddPostFormRedux onSubmit={addPost}/>
             <div className={s.posts}>
                 {
                     props.state.posts.map(p => <Post key={p.id} message={p.message} likeCount={p.likeCount}/>)

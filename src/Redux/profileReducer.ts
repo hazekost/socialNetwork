@@ -3,9 +3,6 @@ import {networkAPI} from "../api/networkAPI";
 
 type AddPostActionReturnType = {
     type: "ADD-POST"
-}
-type ChangePostTextActionReturnType = {
-    type: "CHANGE-POST-TEXT"
     value: string
 }
 type setUserProfileReturnType = {
@@ -16,7 +13,7 @@ type setUserStatusReturnType = {
     type: "SET-USER-STATUS",
     status: string
 }
-type ActionType = AddPostActionReturnType|ChangePostTextActionReturnType|setUserProfileReturnType|setUserStatusReturnType
+type ActionType = AddPostActionReturnType|setUserProfileReturnType|setUserStatusReturnType
 export type userProfileType = {
     aboutMe: string
     contacts: {
@@ -40,7 +37,6 @@ export type userProfileType = {
 }
 type initialStateType = {
     posts: Array<{ id: number, message: string, likeCount: number }>
-    newPostText: string
     profile: userProfileType | null
     userStatus: string
 }
@@ -50,7 +46,6 @@ let initialState: initialStateType = {
         {id: 1, message: "Hi", likeCount: 10},
         {id: 2, message: "Sup", likeCount: 15}
     ],
-    newPostText: "",
     profile: null,
     userStatus: ""
 }
@@ -58,13 +53,7 @@ let initialState: initialStateType = {
 export const profileReducer = (state: initialStateType = initialState, action: ActionType): initialStateType => {
     switch (action.type) {
         case "ADD-POST":
-            return {
-                ...state,
-                posts: [...state.posts, {id: 3, message: state.newPostText, likeCount: 0}],
-                newPostText: ""
-            }
-        case "CHANGE-POST-TEXT":
-            return {...state, newPostText: action.value}
+            return {...state, posts: [...state.posts, {id: 3, message: action.value, likeCount: 0}]}
         case "SET-USER-PROFILE":
             return {...state, profile: action.profile}
         case "SET-USER-STATUS":
@@ -74,12 +63,9 @@ export const profileReducer = (state: initialStateType = initialState, action: A
     }
 }
 
-export const ChangePostText = (value: string): ChangePostTextActionReturnType => ({
-    type: "CHANGE-POST-TEXT",
-    value: value
-})
-export const AddPost = (): AddPostActionReturnType => ({
-    type: "ADD-POST"
+export const AddPost = (value: string): AddPostActionReturnType => ({
+    type: "ADD-POST",
+    value
 })
 const SetUserProfile = (profile: userProfileType): setUserProfileReturnType => ({
     type: "SET-USER-PROFILE",

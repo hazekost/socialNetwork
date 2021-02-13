@@ -5,8 +5,8 @@ import {BrowserRouter, Route} from "react-router-dom";
 import DialogsContainer from "./components/Dialogs/DialogsContainer";
 import ProfileContainer from "./components/Profile/ProfileContainer";
 import HeaderContainer from "./components/Header/HeaderConstainer";
-import Login from "./components/Login/Login";
 import UsersContainer from "./components/Users/UsersContainer";
+import {Login} from "./components/Login/Login";
 
 function App() {
     return (

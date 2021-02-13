@@ -1,15 +1,11 @@
 type AddMessageActionType = {
     type: "ADD-MESSAGE"
-}
-type ChangeMessageTextActionType = {
-    type: "CHANGE-MESSAGE-TEXT"
     value: string
 }
-type ActionType = AddMessageActionType|ChangeMessageTextActionType
+type ActionType = AddMessageActionType
 type initialStateType = {
     dialogs: Array<{ id: number, name: string }>
     messages: Array<{ id: number, message: string }>
-    newMessageText: string
 }
 let initialState: initialStateType = {
     dialogs: [
@@ -22,25 +18,19 @@ let initialState: initialStateType = {
         {id: 1, message: "Hi"},
         {id: 2, message: "Yo"},
         {id: 3, message: "Sup"}
-    ],
-    newMessageText: ""
+    ]
 }
 
 export const dialogsReducer = (state: initialStateType = initialState, action: ActionType): initialStateType => {
     switch (action.type) {
         case "ADD-MESSAGE":
-            return {...state, messages: [...state.messages, {id: 4, message: state.newMessageText}], newMessageText: ""}
-        case "CHANGE-MESSAGE-TEXT":
-            return {...state, newMessageText: action.value}
+            return {...state, messages: [...state.messages, {id: 4, message: action.value}]}
         default:
             return state
     }
 }
 
-export const AddMessage = (): AddMessageActionType => ({
-    type: "ADD-MESSAGE"
-})
-export const ChangeMessageText = (value: string): ChangeMessageTextActionType => ({
-    type: "CHANGE-MESSAGE-TEXT",
-    value: value
+export const AddMessage = (value: string): AddMessageActionType => ({
+    type: "ADD-MESSAGE",
+    value
 })
