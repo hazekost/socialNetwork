@@ -6,6 +6,7 @@ import {Preloader} from "../common/Preloader/Preloader";
 
 type HeaderPropsType = {
     state: initialStateType
+    logOut: () => void
 }
 
 export const Header: React.FC<HeaderPropsType> = (props) => {
@@ -14,7 +15,9 @@ export const Header: React.FC<HeaderPropsType> = (props) => {
         <div className={s.loginBlock}>
             {props.state.isFetching
                 ? <Preloader/>
-                : <div>{props.state.isAuth ? <h3>{props.state.login}</h3> : <NavLink to={"/login"}>Login</NavLink>}</div>}
+                : <div>{props.state.isAuth
+                    ? <div><div>{props.state.login}</div><button onClick={props.logOut}>LogOut</button></div>
+                    : <NavLink to={"/login"}>Login</NavLink>}</div>}
         </div>
     </header>
 }

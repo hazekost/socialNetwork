@@ -71,5 +71,11 @@ export const networkAPI = {
     },
     updateStatus(status: string) {
         return instance.put<followUnFollowUpdateStatusLoginReturnType>(`profile/status`, {status})
+    },
+    login(email: string, password: string, rememberMe: boolean) {
+        return instance.post(`/auth/login`, {email, password, rememberMe})
+    },
+    logout() {
+        return instance.delete(`/auth/login`)
     }
 }
