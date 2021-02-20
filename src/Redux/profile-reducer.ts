@@ -76,14 +76,14 @@ const SetUserStatus = (status: string): setUserStatusReturnType => ({
     status
 })
 
-export const getProfile = (userId: string) => {
+export const getProfile = (userId: number) => {
     return (dispatch: Dispatch<ActionType>) => {
         networkAPI.getProfile(userId).then(response => {
             dispatch(SetUserProfile(response.data))
         })
     }
 }
-export const getStatus = (userId: string) => {
+export const getStatus = (userId: number) => {
     return (dispatch: Dispatch<ActionType>) => {
         networkAPI.getStatus(userId).then(response => {
             dispatch(SetUserStatus(response.data))

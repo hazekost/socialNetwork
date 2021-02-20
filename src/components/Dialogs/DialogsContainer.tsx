@@ -1,5 +1,5 @@
 import React from "react";
-import {AddMessage} from "../../Redux/dialogsReducer";
+import {AddMessage} from "../../Redux/dialogs-reducer";
 import {Dialogs} from "./Dialogs";
 import {connect} from "react-redux";
 import {rootStateType} from "../../Redux/reduxStore";
@@ -8,7 +8,7 @@ import {compose} from "redux";
 
 const mapStateToProps = (state: rootStateType) => {
     return {
-        state: state.messagesPage
+        messagePage: state.messagesPage
     }
 }
 

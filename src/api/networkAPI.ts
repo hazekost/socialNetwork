@@ -54,11 +54,11 @@ export const networkAPI = {
     getUsers(currentPage: number, pageSize: number) {
         return instance.get<getUsersReturnType>(`users?page=${currentPage}&count=${pageSize}`)
     },
-    getProfile(userId: string) {
+    getProfile(userId: number) {
         return instance.get<getUserProfileReturnType>(`profile/${userId}`)
     },
     getAuth() {
-        return instance.get<AuthReturnType>("auth/me")
+        return instance.get<AuthReturnType>(`auth/me`)
     },
     follow(userId: number) {
         return instance.post<followUnFollowUpdateStatusLoginReturnType>(`follow/${userId}`)
@@ -66,7 +66,7 @@ export const networkAPI = {
     unFollow(userId: number) {
         return instance.delete<followUnFollowUpdateStatusLoginReturnType>(`follow/${userId}`)
     },
-    getStatus(userId: string) {
+    getStatus(userId: number) {
         return instance.get<string>(`profile/status/${userId}`)
     },
     updateStatus(status: string) {

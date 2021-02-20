@@ -3,7 +3,7 @@ import {Field, InjectedFormProps, reduxForm} from "redux-form"
 import {Input} from "../common/FormsControls/FormsControls";
 import {required} from "../../utils/validators/validators";
 import {connect} from "react-redux";
-import {login} from "../../Redux/authReducer";
+import {loginTC} from "../../Redux/auth-reducer";
 import {Redirect} from "react-router-dom";
 import {rootStateType} from "../../Redux/reduxStore";
 import s from "../common/FormsControls/FormsControls.module.css"
@@ -68,4 +68,4 @@ const mapStateToProps = (state: rootStateType) => {
     }
 }
 
-export default connect(mapStateToProps, {login})(Login)
+export default connect(mapStateToProps, {login: loginTC})(Login)

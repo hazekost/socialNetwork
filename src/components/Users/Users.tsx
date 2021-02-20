@@ -1,7 +1,7 @@
 import s from "./Users.module.css";
 import userIcon from "../../assets/images/userIcon.png";
 import React from "react";
-import {userType} from "../../Redux/usersReducer";
+import {userType} from "../../Redux/users-reducer";
 import {NavLink} from "react-router-dom";
 
 type UsersPropsType = {
@@ -36,23 +36,9 @@ export const Users: React.FC<UsersPropsType> = (props) => {
                         u.followed
                             ? <button disabled={props.followingInProgress.some(id => id === u.id)} onClick={() => {
                                 props.userUnFollow(u.id)
-                                // props.setFollowing(u.id, true)
-                                // networkAPI.unFollow(u.id).then((response) => {
-                                //     if (response.data.resultCode === 0) {
-                                //         props.unFollow(u.id)
-                                //     }
-                                //     props.setFollowing(u.id, false)
-                                // })
                             }}>UnFollow</button>
                             : <button disabled={props.followingInProgress.some(id => id === u.id)} onClick={() => {
                                 props.userFollow(u.id)
-                                // props.setFollowing(u.id, true)
-                                // networkAPI.follow(u.id).then((response) => {
-                                //     if (response.data.resultCode === 0) {
-                                //         props.follow(u.id)
-                                //     }
-                                //     props.setFollowing(u.id, false)
-                                // })
                             }}>Follow</button>
                     }
                 </div>

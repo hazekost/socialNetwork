@@ -1,6 +1,14 @@
 import {networkAPI} from "../api/networkAPI";
 import {Dispatch} from "redux";
 
+export type userType = {
+    id: number
+    photos: { small: string, large: string }
+    followed: boolean
+    name: string
+    status: string
+    uniqueUrlName: string
+}
 type followUnfollowReturnType = {
     type: "FOLLOW"
     userID: number
@@ -32,14 +40,6 @@ type setFollowingReturnType = {
 }
 type ActionType = followUnfollowReturnType | unFollowReturnType | setUsersReturnType | setFollowingReturnType
     | setCurrentPageReturnType | setTotalUsersCountReturnType | setFetchingReturnType
-export type userType = {
-    id: number
-    photos: { small: string, large: string }
-    followed: boolean
-    name: string
-    status: string
-    uniqueUrlName: string
-}
 type initialStateType = {
     users: Array<userType>
     totalCount: number
@@ -127,7 +127,7 @@ export const setFollowing = (userId: number, isFetching: boolean): setFollowingR
     }
 }
 
-export const getUsers = (currentPage: number, pageSize: number) => {
+export const requestUsers = (currentPage: number, pageSize: number) => {
     return (dispatch: Dispatch<ActionType>) => {
         dispatch(setCurrentPage(currentPage))
         dispatch(setFetching(true))

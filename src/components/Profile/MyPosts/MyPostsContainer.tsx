@@ -1,4 +1,4 @@
-import {AddPost} from "../../../Redux/profileReducer";
+import {AddPost} from "../../../Redux/profile-reducer";
 import {MyPosts} from "./MyPosts";
 import {connect} from "react-redux";
 import {rootStateType} from "../../../Redux/reduxStore";
