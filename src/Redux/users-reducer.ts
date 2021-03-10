@@ -30,7 +30,7 @@ type setTotalUsersCountReturnType = {
     totalCount: number
 }
 export type setFetchingReturnType = {
-    type: "SET-FETCHING"
+    type: "auth/SET-FETCHING"
     isFetching: boolean
 }
 type setFollowingReturnType = {
@@ -70,7 +70,7 @@ export const usersReducer = (state: initialStateType = initialState, action: Act
             return {...state, currentPage: action.currentPage}
         case "SET-TOTAL-USERS-COUNT":
             return {...state, totalCount: action.totalCount}
-        case "SET-FETCHING":
+        case "auth/SET-FETCHING":
             return {...state, isFetching: action.isFetching}
         case "TOGGLE-FOLLOWING":
             return {
@@ -115,7 +115,7 @@ const setUsersCount = (totalCount: number): setTotalUsersCountReturnType => {
 }
 export const setFetching = (isFetching: boolean): setFetchingReturnType => {
     return {
-        type: "SET-FETCHING",
+        type: "auth/SET-FETCHING",
         isFetching
     }
 }
@@ -127,38 +127,28 @@ export const setFollowing = (userId: number, isFetching: boolean): setFollowingR
     }
 }
 
-export const requestUsers = (currentPage: number, pageSize: number) => {
-    return (dispatch: Dispatch<ActionType>) => {
-        dispatch(setCurrentPage(currentPage))
-        dispatch(setFetching(true))
-        networkAPI.getUsers(currentPage, pageSize).then(response => {
-            dispatch(setFetching(false))
-            dispatch(setUsers(response.data.items))
-            dispatch(setUsersCount(response.data.totalCount))
-        })
-    }
+export const requestUsersTC = (currentPage: number, pageSize: number) => async (dispatch: Dispatch<ActionType>) => {
+    dispatch(setCurrentPage(currentPage))
+    dispatch(setFetching(true))
+    let response = await networkAPI.getUsers(currentPage, pageSize)
+    dispatch(setFetching(false))
+    dispatch(setUsers(response.data.items))
+    dispatch(setUsersCount(response.data.totalCount))
 }
 
-export const userUnFollow = (userId: number) => {
-    return (dispatch: Dispatch<ActionType>) => {
-        dispatch(setFollowing(userId, true))
-        networkAPI.unFollow(userId).then((response) => {
-            if (response.data.resultCode === 0) {
-                dispatch(unFollow(userId))
-            }
-            dispatch(setFollowing(userId, false))
-        })
+const followUnFollowFlow = async (dispatch: Dispatch, userId: number, apiMethod: any, actionCreator: any) => {
+    dispatch(setFollowing(userId, true))
+    let response = await apiMethod(userId)
+    if (response.data.resultCode === 0) {
+        dispatch(actionCreator(userId))
     }
+    dispatch(setFollowing(userId, false))
 }
 
-export const userFollow = (userId: number) => {
-    return (dispatch: Dispatch<ActionType>) => {
-        dispatch(setFollowing(userId, true))
-        networkAPI.follow(userId).then((response) => {
-            if (response.data.resultCode === 0) {
-                dispatch(follow(userId))
-            }
-            dispatch(setFollowing(userId, false))
-        })
-    }
+export const userFollow = (userId: number) => async (dispatch: Dispatch) => {
+    await followUnFollowFlow(dispatch, userId, networkAPI.follow.bind(networkAPI), follow)
+}
+
+export const userUnFollow = (userId: number) => async (dispatch: Dispatch) => {
+    await followUnFollowFlow(dispatch, userId, networkAPI.unFollow.bind(networkAPI), unFollow)
 }

@@ -14,20 +14,21 @@ type FormDataType = {
     rememberMe: boolean
 }
 
-const LoginForm: React.FC<InjectedFormProps<FormDataType>> = (props) => {
+const LoginForm: React.FC<InjectedFormProps<FormDataType>> = ({handleSubmit, error}) => {
     return (
-        <form onSubmit={props.handleSubmit}>
+        <form onSubmit={handleSubmit}>
             <div>
                 <Field placeholder={"Login"} validate={[required]} name={"email"} component={Input}/>
             </div>
             <div>
-                <Field placeholder={"Password"} validate={[required]} type={"password"} name={"password"} component={Input}/>
+                <Field placeholder={"Password"} validate={[required]} type={"password"} name={"password"}
+                       component={Input}/>
             </div>
             <div>
                 <Field component={"input"} name={"rememberMe"} type={"checkbox"}/> remember me
             </div>
-            {props.error && <div className={s.formSummaryError}>
-                {props.error}
+            {error && <div className={s.formSummaryError}>
+                {error}
             </div>}
             <div>
                 <button>LogIn</button>
@@ -43,14 +44,14 @@ type LoginPropsType = {
     login: (email: string, password: string, rememberMe: boolean) => void
 }
 
-const Login: React.FC<LoginPropsType> = (props) => {
+const Login: React.FC<LoginPropsType> = ({isAuth, login}) => {
 
     const onSubmit = (formData: FormDataType) => {
         let {email, password, rememberMe} = formData
-        props.login(email, password, rememberMe)
+        login(email, password, rememberMe)
     }
 
-    if (props.isAuth) {
+    if (isAuth) {
         return <Redirect to={"/profile"}/>
     }
 

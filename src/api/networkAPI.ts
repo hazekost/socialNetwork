@@ -36,7 +36,7 @@ type getUserProfileReturnType = {
     }
     userId: number
 }
-type followUnFollowUpdateStatusLoginReturnType = {
+export type followUnFollowUpdateStatusLoginReturnType = {
     resultCode: number
     messages: Array<string>
     data: {}

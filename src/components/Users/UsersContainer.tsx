@@ -1,11 +1,10 @@
 import {connect} from "react-redux";
 import {rootStateType} from "../../Redux/reduxStore";
-import {follow, requestUsers, setFollowing, unFollow, userFollow, userType, userUnFollow
+import {follow, requestUsersTC, setFollowing, unFollow, userFollow, userType, userUnFollow
 } from "../../Redux/users-reducer";
 import React from "react";
 import {Users} from "./Users";
 import {Preloader} from "../common/Preloader/Preloader";
-import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
 import {getCurrentPage, getIsFetching, getFollowingInProgress, getTotalUsersCount, getPageSize, getUsers
 } from "../../Redux/users-selectors";
@@ -48,17 +47,6 @@ class UsersContainer extends React.Component<UsersPropsType> {
     }
 }
 
-/*const mapStateToProps = (state: rootStateType) => {
-    return {
-        users: state.userPage.users,
-        totalCount: state.userPage.totalCount,
-        pageSize: state.userPage.pageSize,
-        currentPage: state.userPage.currentPage,
-        isFetching: state.userPage.isFetching,
-        followingInProgress: state.userPage.followingInProgress
-    }
-}*/
-
 const mapStateToProps = (state: rootStateType) => {
     return {
         users: getUsers(state),
@@ -71,7 +59,7 @@ const mapStateToProps = (state: rootStateType) => {
 }
 
 export default compose<React.ComponentType>(connect(mapStateToProps, {
-    follow, unFollow, setFollowing, getUsersPage: requestUsers, userFollow, userUnFollow
+    follow, unFollow, setFollowing, getUsersPage: requestUsersTC, userFollow, userUnFollow
     })
 )(UsersContainer)
 

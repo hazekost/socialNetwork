@@ -1,4 +1,4 @@
-import {setFetching, setFetchingReturnType} from "./users-reducer";
+import {setFetchingReturnType} from "./users-reducer";
 import {Dispatch} from "redux";
 import {networkAPI} from "../api/networkAPI";
 import {stopSubmit} from "redux-form";
@@ -22,52 +22,44 @@ let initialState: initialStateType = {
 
 export const authReducer = (state: initialStateType = initialState, action: ActionType): initialStateType => {
     switch (action.type) {
-        case "SET-AUTH":
+        case "auth/SET-AUTH":
             return {...state, ...action.data}
-        case "SET-FETCHING":
+        case "auth/SET-FETCHING":
             return {...state, isFetching: action.isFetching}
         default:
             return state
     }
 }
 
-const setAuth = (id: number|null, email: string|null, login: string|null, isAuth: boolean) => {
+const setAuth = (id: number | null, email: string | null, login: string | null, isAuth: boolean) => {
     return {
-        type: "SET-AUTH",
+        type: "auth/SET-AUTH",
         data: {id, email, login, isAuth},
     } as const
 }
 
-export const getAuthTC = () => (dispatch: Dispatch<ActionType>) => {
-    /*dispatch(setFetching(true))*/
-        return  networkAPI.getAuth().then((response) => {
-            if (response.data.resultCode === 0) {
-                let {login, email, id} = response.data.data
-                dispatch(setAuth(id, email, login, true))
-            }
-            /*dispatch(setFetching(false))*/
-        })
-    }
-
-export const loginTC = (email: string, password: string, rememberMe: boolean) => {
-    return (dispatch: Dispatch<any>) => {
-        networkAPI.login(email, password, rememberMe).then((response) => {
-            if (response.data.resultCode === 0) {
-                dispatch(getAuthTC())
-            } else {
-                let message = response.data.messages.length > 0 ? response.data.messages[0] : "Some error"
-                dispatch(stopSubmit("Login", {_error: message}))
-            }
-        })
+export const getAuthTC = () => async (dispatch: Dispatch<ActionType>) => {
+    let response = await networkAPI.getAuth()
+    if (response.data.resultCode === 0) {
+        let {login, email, id} = response.data.data
+        dispatch(setAuth(id, email, login, true))
     }
 }
 
-export const logoutTC = () => {
-    return (dispatch: Dispatch<setAuthReturnType>) => {
-        networkAPI.logout().then((response) => {
-            if (response.data.resultCode === 0) {
-                dispatch((setAuth(null, null, null, false)))
-            }
-        })
+export const loginTC = (email: string, password: string, rememberMe: boolean) => async (dispatch: Dispatch<any>) => {
+    let response = await networkAPI.login(email, password, rememberMe)
+    if (response.data.resultCode === 0) {
+        dispatch(getAuthTC())
+    } else {
+        let message = response.data.messages.length > 0 ? response.data.messages[0] : "Some error"
+        dispatch(stopSubmit("Login", {_error: message}))
+    }
+}
+
+
+export const logoutTC = () => async (dispatch: Dispatch<setAuthReturnType>) => {
+    let response = await networkAPI.logout()
+    if (response.data.resultCode === 0) {
+        dispatch((setAuth(null, null, null, false)))
     }
 }

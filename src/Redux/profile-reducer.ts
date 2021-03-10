@@ -2,18 +2,19 @@ import {Dispatch} from "redux";
 import {networkAPI} from "../api/networkAPI";
 
 type AddPostActionReturnType = {
-    type: "ADD-POST"
+    type: "profile/ADD-POST"
     value: string
 }
 type setUserProfileReturnType = {
-    type: "SET-USER-PROFILE"
+    type: "profile/SET-USER-PROFILE"
     profile: userProfileType
 }
 type setUserStatusReturnType = {
-    type: "SET-USER-STATUS",
+    type: "profile/SET-USER-STATUS",
     status: string
 }
-type ActionType = AddPostActionReturnType|setUserProfileReturnType|setUserStatusReturnType
+type DeletePostReturnType = ReturnType<typeof DeletePost>
+type ActionType = AddPostActionReturnType | setUserProfileReturnType | setUserStatusReturnType | DeletePostReturnType
 export type userProfileType = {
     aboutMe: string
     contacts: {
@@ -52,50 +53,49 @@ let initialState: initialStateType = {
 
 export const profileReducer = (state: initialStateType = initialState, action: ActionType): initialStateType => {
     switch (action.type) {
-        case "ADD-POST":
+        case "profile/ADD-POST":
             return {...state, posts: [...state.posts, {id: 3, message: action.value, likeCount: 0}]}
-        case "SET-USER-PROFILE":
+        case "profile/SET-USER-PROFILE":
             return {...state, profile: action.profile}
-        case "SET-USER-STATUS":
+        case "profile/SET-USER-STATUS":
             return {...state, userStatus: action.status}
+        case "profile/DELETE-POST":
+            return {...state, posts: state.posts.filter(p => p.id !== action.id)}
         default:
             return state
     }
 }
 
 export const AddPost = (value: string): AddPostActionReturnType => ({
-    type: "ADD-POST",
+    type: "profile/ADD-POST",
     value
 })
 const SetUserProfile = (profile: userProfileType): setUserProfileReturnType => ({
-    type: "SET-USER-PROFILE",
+    type: "profile/SET-USER-PROFILE",
     profile
 })
 const SetUserStatus = (status: string): setUserStatusReturnType => ({
-    type: "SET-USER-STATUS",
+    type: "profile/SET-USER-STATUS",
     status
 })
+export const DeletePost = (id: number) => {
+    return {
+        type: "profile/DELETE-POST",
+        id
+    } as const
+}
 
-export const getProfile = (userId: number) => {
-    return (dispatch: Dispatch<ActionType>) => {
-        networkAPI.getProfile(userId).then(response => {
-            dispatch(SetUserProfile(response.data))
-        })
-    }
+export const getUserProfile = (userId: number) => async (dispatch: Dispatch<ActionType>) => {
+    let response = await networkAPI.getProfile(userId)
+    dispatch(SetUserProfile(response.data))
 }
-export const getStatus = (userId: number) => {
-    return (dispatch: Dispatch<ActionType>) => {
-        networkAPI.getStatus(userId).then(response => {
-            dispatch(SetUserStatus(response.data))
-        })
-    }
+export const getStatus = (userId: number) => async (dispatch: Dispatch<ActionType>) => {
+    let response = await networkAPI.getStatus(userId)
+    dispatch(SetUserStatus(response.data))
 }
-export const updateStatus = (status: string) => {
-    return (dispatch: Dispatch<ActionType>) => {
-        networkAPI.updateStatus(status).then(response => {
-            if (response.data.resultCode === 0) {
-                dispatch(SetUserStatus(status))
-            }
-        })
+export const updateStatus = (status: string) => async (dispatch: Dispatch<ActionType>) => {
+    let response = await networkAPI.updateStatus(status)
+    if (response.data.resultCode === 0) {
+        dispatch(SetUserStatus(status))
     }
 }
