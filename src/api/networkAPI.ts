@@ -36,17 +36,17 @@ type getUserProfileReturnType = {
     }
     userId: number
 }
-export type followUnFollowUpdateStatusLoginReturnType = {
+export type ReturnType<D={}> = {
     resultCode: number
     messages: Array<string>
-    data: {}
+    data: D
 }
 
 const instance = axios.create({
     baseURL: "https://social-network.samuraijs.com/api/1.0/",
     withCredentials: true,
     headers: {
-        "api-key": "27636629-bdcd-409c-933a-c0c1a7e1a005"
+        "api-key": "6c600c87-cd10-4399-80d8-d0a35356bfb5"
     }
 })
 
@@ -61,21 +61,30 @@ export const networkAPI = {
         return instance.get<AuthReturnType>(`auth/me`)
     },
     follow(userId: number) {
-        return instance.post<followUnFollowUpdateStatusLoginReturnType>(`follow/${userId}`)
+        return instance.post<ReturnType>(`follow/${userId}`)
     },
     unFollow(userId: number) {
-        return instance.delete<followUnFollowUpdateStatusLoginReturnType>(`follow/${userId}`)
+        return instance.delete<ReturnType>(`follow/${userId}`)
     },
     getStatus(userId: number) {
         return instance.get<string>(`profile/status/${userId}`)
     },
     updateStatus(status: string) {
-        return instance.put<followUnFollowUpdateStatusLoginReturnType>(`profile/status`, {status})
+        return instance.put<ReturnType>(`profile/status`, {status})
     },
     login(email: string, password: string, rememberMe: boolean) {
         return instance.post(`/auth/login`, {email, password, rememberMe})
     },
     logout() {
         return instance.delete(`/auth/login`)
+    },
+    savePhoto(file: File) {
+        const formData = new FormData()
+        formData.append("image", file)
+        return instance.put<ReturnType<{small: string, large: string}>>(`profile/photo`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
     }
 }

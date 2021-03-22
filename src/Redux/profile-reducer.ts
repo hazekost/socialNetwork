@@ -14,10 +14,16 @@ type setUserStatusReturnType = {
     status: string
 }
 type DeletePostReturnType = ReturnType<typeof DeletePost>
-type ActionType = AddPostActionReturnType | setUserProfileReturnType | setUserStatusReturnType | DeletePostReturnType
+type SavePhotoSuccessReturnType = ReturnType<typeof savePhotoSuccess>
+type ActionType =
+    AddPostActionReturnType
+    | setUserProfileReturnType
+    | setUserStatusReturnType
+    | DeletePostReturnType
+    | SavePhotoSuccessReturnType
 export type userProfileType = {
-    aboutMe: string
-    contacts: {
+    aboutMe?: string
+    contacts?: {
         facebook: string
         website: string
         vk: string
@@ -27,13 +33,13 @@ export type userProfileType = {
         github: string
         mainLink: string
     }
-    lookingForAJob: boolean
-    lookingForAJobDescription: string
-    fullName: string
-    userId: number
+    lookingForAJob?: boolean
+    lookingForAJobDescription?: string
+    fullName?: string
+    userId?: number
     photos: {
-        small: string
-        large: string
+        small: string | null
+        large: string | null
     }
 }
 type initialStateType = {
@@ -61,29 +67,20 @@ export const profileReducer = (state: initialStateType = initialState, action: A
             return {...state, userStatus: action.status}
         case "profile/DELETE-POST":
             return {...state, posts: state.posts.filter(p => p.id !== action.id)}
+        case "profile/SAVE-PHOTO":
+            return {...state, profile: {...state.profile, photos: action.photos}}
         default:
             return state
     }
 }
 
-export const AddPost = (value: string): AddPostActionReturnType => ({
-    type: "profile/ADD-POST",
-    value
-})
+export const AddPost = (value: string): AddPostActionReturnType => ({type: "profile/ADD-POST", value})
 const SetUserProfile = (profile: userProfileType): setUserProfileReturnType => ({
-    type: "profile/SET-USER-PROFILE",
-    profile
+    type: "profile/SET-USER-PROFILE", profile
 })
-const SetUserStatus = (status: string): setUserStatusReturnType => ({
-    type: "profile/SET-USER-STATUS",
-    status
-})
-export const DeletePost = (id: number) => {
-    return {
-        type: "profile/DELETE-POST",
-        id
-    } as const
-}
+const SetUserStatus = (status: string): setUserStatusReturnType => ({type: "profile/SET-USER-STATUS", status})
+export const DeletePost = (id: number) => ({type: "profile/DELETE-POST", id} as const)
+const savePhotoSuccess = (photos: {small: string, large: string}) => ({type: "profile/SAVE-PHOTO", photos} as const)
 
 export const getUserProfile = (userId: number) => async (dispatch: Dispatch<ActionType>) => {
     let response = await networkAPI.getProfile(userId)
@@ -97,5 +94,11 @@ export const updateStatus = (status: string) => async (dispatch: Dispatch<Action
     let response = await networkAPI.updateStatus(status)
     if (response.data.resultCode === 0) {
         dispatch(SetUserStatus(status))
+    }
+}
+export const savePhoto = (file: File) => async (dispatch: Dispatch<ActionType>) => {
+    let response = await networkAPI.savePhoto(file)
+    if (response.data.resultCode === 0) {
+        dispatch(savePhotoSuccess(response.data.data))
     }
 }
