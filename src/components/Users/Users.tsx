@@ -3,10 +3,11 @@ import userIcon from "../../assets/images/userIcon.png";
 import React from "react";
 import {userType} from "../../Redux/users-reducer";
 import {NavLink} from "react-router-dom";
+import {Paginator} from "../common/Paginator/Paginator";
 
 type UsersPropsType = {
     totalCount: number
-    pageSize: 5
+    pageSize: number
     followingInProgress: Array<number>
     onPageChanged: (pageNumber: number) => void
     currentPage: number
@@ -16,12 +17,6 @@ type UsersPropsType = {
 }
 
 export const Users: React.FC<UsersPropsType> = (props) => {
-
-    let pagesCount = Math.ceil(props.totalCount / props.pageSize)
-    let pages = []
-    for (let i = 1; i <= pagesCount; i++) {
-        pages.push(i)
-    }
 
     return (
         <div>
@@ -45,15 +40,8 @@ export const Users: React.FC<UsersPropsType> = (props) => {
                 <div>{u.name}</div>
                 <div>{u.status}</div>
             </div>)}
-            <div>
-                {
-                    pages.map(p =>
-                        <span onClick={() => {
-                            props.onPageChanged(p)
-                        }}
-                              className={props.currentPage === p ? s.selectedPage : ""}>{p} </span>)
-                }
-            </div>
+            <Paginator totalCount={props.totalCount} pageSize={props.pageSize}
+                       currentPage={props.currentPage} onPageChanged={props.onPageChanged}/>
         </div>
     )
 }
