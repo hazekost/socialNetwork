@@ -1,0 +1,12 @@
+aside {
+    grid-column: span 2;
+    background-color: rgb(81, 41, 119);
+}
+
+.item {
+    color: white;
+}
+
+.active {
+    color: red;
+}
