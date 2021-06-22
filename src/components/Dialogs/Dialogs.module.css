@@ -1,0 +1,12 @@
+.dialogs {
+    display: flex;
+    padding: 20px;
+}
+
+.dialogs > div:nth-child(2) {
+    margin-left: 20%;
+}
+
+.active {
+    color: purple;
+}

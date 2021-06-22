@@ -1,11 +1,17 @@
-import s from "../../MainContent.module.css"
+import s from "./Post.module.css"
 
-export const Post = () => {
+type PostPropsType = {
+    message: string
+    likeCount: number
+}
+
+export const Post: React.FC<PostPropsType> = (props) => {
     return <div className={s.post}>
         <img src={"http://cdn.onlinewebfonts.com/svg/img_173956.png"} />
-        post1
+        {props.message}
         <div>
-            <button>Like</button>
+            <span>Like</span>
+            <span>{props.likeCount}</span>
         </div>
     </div>
 }

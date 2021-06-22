@@ -5,3 +5,8 @@
     width: 1300px;
     margin: auto;
 }
+
+.content {
+    grid-column: span 10;
+    background-color: rgb(211, 30, 39);
+}
