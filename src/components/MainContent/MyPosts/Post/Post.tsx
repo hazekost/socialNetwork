@@ -10,7 +10,7 @@ export const Post: React.FC<PostPropsType> = (props) => {
         <img src={"https://upload.wikimedia.org/wikipedia/commons/2/24/Missing_avatar.svg"} />
         {props.message}
         <div>
-            <span>Like</span>
+            <span>Like </span>
             <span>{props.likesCount}</span>
         </div>
     </div>

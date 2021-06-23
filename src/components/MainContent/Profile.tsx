@@ -1,4 +1,4 @@
-import { PostType } from "../.."
+import { PostType } from "../../state/state"
 import { MyPosts } from "./MyPosts/MyPosts"
 import { ProfileInfo } from "./ProfileInfo/ProfileInfo"
 
