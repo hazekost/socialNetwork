@@ -3,18 +3,30 @@ import { Message } from "./Message"
 import { User } from "./User"
 
 export const Dialogs = () => {
+
+    let usersData = [
+        { id: 1, name: "Dimych" },
+        { id: 2, name: "Sveta" },
+        { id: 3, name: "Sasha" },
+        { id: 4, name: "Victor" },
+        { id: 5, name: "Igon" },
+        { id: 6, name: "Jason" },
+        { id: 7, name: "Violet" }
+    ]
+
+    let messagesData = [
+        { id: 1, message: "Hello" },
+        { id: 2, message: "HI" },
+        { id: 3, message: "Don't ignore me" },
+        { id: 4, message: "Heey" }
+    ]
+
     return <div className={s.dialogs}>
         <div className={s.users}>
-            <User userID={1} name={"Dimych"} />
-            <User userID={2} name={"Sveta"} />
-            <User userID={3} name={"Sasha"} />
-            <User userID={4} name={"Victor"} />
+            {usersData.map(u => <User key={u.id} id={u.id} name={u.name} />)}
         </div>
         <div className={s.messages}>
-            <Message message={"Hello"} />
-            <Message message={"HI"} />
-            <Message message={"Don't ignore me"} />
-            <Message message={"Heey"} />
+            {messagesData.map(m => <Message key={m.id} message={m.message} />)}
         </div>
     </div>
 }

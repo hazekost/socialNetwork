@@ -7,7 +7,7 @@ export const ProfileInfo = () => {
         </div>
         <div className={s.userDescr}>
             <div className={s.ava}>
-                <img src={"http://cdn.onlinewebfonts.com/svg/img_173956.png"} />
+                <img src={"https://upload.wikimedia.org/wikipedia/commons/2/24/Missing_avatar.svg"} />
             </div>
             <div>
                 <div>Name</div>
