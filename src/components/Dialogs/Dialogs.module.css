@@ -15,3 +15,7 @@
 .user a.active {
     color: purple;
 }
+
+.message {
+    color: white;
+}

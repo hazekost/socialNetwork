@@ -1,9 +1,14 @@
+import { PostType } from "../.."
 import { MyPosts } from "./MyPosts/MyPosts"
 import { ProfileInfo } from "./ProfileInfo/ProfileInfo"
 
-export const Profile = () => {
+type ProfilePropsType = {
+    posts: Array<PostType>
+}
+
+export const Profile: React.FC<ProfilePropsType> = (props) => {
     return <div>
         <ProfileInfo />
-        <MyPosts />
+        <MyPosts posts={props.posts} />
     </div>
 }

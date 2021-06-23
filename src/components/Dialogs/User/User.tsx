@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import s from "./Dialogs.module.css"
+import s from "../Dialogs.module.css"
 
 type UserPropsType = {
     id: number
