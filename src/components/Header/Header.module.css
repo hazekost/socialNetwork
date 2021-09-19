@@ -1,8 +1,0 @@
-header {
-    grid-column: span 12;
-    background-color: rgb(201, 133, 133);
-}
-
-header > img {
-    width: 50px;
-}
