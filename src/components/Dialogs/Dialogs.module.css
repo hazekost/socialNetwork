@@ -3,23 +3,3 @@
     grid-template-columns: 1fr 5fr;
     padding: 10px;
 }
-
-.users {
-    
-}
-
-.user {
-
-}
-
-.messages {
-    
-}
-
-.message {
-
-}
-
-.active {
-    color: gold;
-}

@@ -1,37 +1,24 @@
-import { NavLink } from "react-router-dom"
+import { DialogItem } from "./DialogItem/DialogItem"
+import { MessageItem } from "./MessageItem/MessageItem"
 import s from "./Dialogs.module.css"
+import { MessagesPageType } from "../.."
 
-export function Dialogs() {
+type DialogsPropsType = {
+    state: MessagesPageType
+}
+
+export const Dialogs: React.FC<DialogsPropsType> = (props) => {
+
     return <div className={s.dialogs}>
         <div className={s.users}>
-            <DialogItem id={1} name={"Dimysn"} />
-            <DialogItem id={2} name={"Valera"} />
-            <DialogItem id={3} name={"Vika"} />
-            <DialogItem id={4} name={"Sveta"} />
+            {
+                props.state.dialogs.map(d => <DialogItem key={d.id} id={d.id} name={d.name} />)
+            }
         </div>
         <div className={s.messages}>
-            <MessageItem message={"Hello"} />
-            <MessageItem message={"How are u"} />
-            <MessageItem message={"Yo"} />
+            {
+                props.state.messages.map(m => <MessageItem key={m.id} message={m.message} />)
+            }
         </div>
     </div>
-}
-
-type DialogItemPropsType = {
-    id: number
-    name: string
-}
-
-function DialogItem(props: DialogItemPropsType) {
-    return <div>
-        <NavLink to={`/messages/${props.id}`} className={`${s.user} ${s.active}`}>{props.name}</NavLink>
-    </div>
-}
-
-type MessageItemPropsType = {
-    message: string
-}
-
-function MessageItem(props: MessageItemPropsType) {
-    return <div className={s.message}>{props.message}</div>
 }

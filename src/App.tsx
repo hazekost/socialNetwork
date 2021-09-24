@@ -1,4 +1,5 @@
 import { Route } from "react-router-dom";
+import { StateType } from ".";
 import "./App.css"
 import { Dialogs } from "./components/Dialogs/Dialogs";
 import { Header } from "./components/Header/Header";
@@ -8,17 +9,21 @@ import { News } from "./components/News/News";
 import { Profile } from "./components/Profile/Profile";
 import { Settings } from "./components/Settings/Settings";
 
-function App() {
+type AppPropsType = {
+  state: StateType
+}
+
+function App(props: AppPropsType) {
   return (
     <div className="app-wrapper">
       <Header />
       <NavBar />
       <div className="content">
-        <Route path="/messages" component={Dialogs} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/music" component={Music} />
-        <Route path="/news" component={News} />
-        <Route path="/settings" component={Settings} />
+        <Route path="/messages" render={() => <Dialogs state={props.state.messagesPage} />} />
+        <Route path="/profile" render={() => <Profile posts={props.state.profilePage.posts} />} />
+        <Route path="/music" render={() => <Music />} />
+        <Route path="/news" render={() => <News />} />
+        <Route path="/settings" render={() => <Settings />} />
       </div>
     </div>
   );

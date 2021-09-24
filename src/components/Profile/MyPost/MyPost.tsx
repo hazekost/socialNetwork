@@ -1,15 +1,22 @@
 import { Post } from "./Post/Post";
 import s from "./MyPost.module.css"
+import { PostType } from "../../..";
 
-export function MyPost() {
+type MyPostPropsType = {
+    posts: Array<PostType>
+}
+
+export const MyPost: React.FC<MyPostPropsType> = (props) => {
+
     return <div className={s.myPost}>
         <div>
             <textarea />
             <button>Add Post</button>
         </div>
         <div className={s.posts}>
-            <Post value="LOLO" />
-            <Post value="KEK" />
+            {
+                props.posts.map(p => <Post key={p.id} value={p.post} likesCount={p.likesCount} />)
+            }
         </div>
     </div>
 }
