@@ -1,7 +1,7 @@
 import { Post } from "./Post/Post";
 import s from "./MyPost.module.css"
-import { ProfilePageType } from "../../../Redux/state";
 import React, { ChangeEvent } from "react";
+import { ProfilePageType } from "../../../Redux/store";
 
 type MyPostPropsType = {
     state: ProfilePageType
@@ -12,9 +12,7 @@ type MyPostPropsType = {
 export const MyPost: React.FC<MyPostPropsType> = (props) => {
 
     const addPost = () => {
-        if (props.state.newPostText.trim()) {
-            props.addPost()
-        }
+        props.addPost()
     }
     const onTextAreaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         props.onPostChange(e.currentTarget.value)

@@ -1,13 +1,13 @@
-export type PostType = {
+type PostType = {
     post: string
     id: number
     likesCount: number
 }
-export type DialogType = {
+type DialogType = {
     name: string
     id: number
 }
-export type MessageType = {
+type MessageType = {
     message: string
     id: number
 }
@@ -20,7 +20,7 @@ export type MessagesPageType = {
     dialogs: Array<DialogType>
     newMessageText: string
 }
-export type StateType = {
+type StateType = {
     profilePage: ProfilePageType
     messagesPage: MessagesPageType
 }
@@ -71,7 +71,9 @@ export let store: StoreType = {
     },
     addPost() {
         let post = this._state.profilePage.newPostText
-        this._state.profilePage.posts.push({ post, id: 3, likesCount: 0 })
+        if (post.trim() !== "") {
+            this._state.profilePage.posts.push({ post, id: 3, likesCount: 0 })
+        }
         this._state.profilePage.newPostText = ""
         this._subscriber()
     },
