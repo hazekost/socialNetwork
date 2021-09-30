@@ -7,21 +7,27 @@ import { NavBar } from "./components/NavBar/NavBar";
 import { News } from "./components/News/News";
 import { Profile } from "./components/Profile/Profile";
 import { Settings } from "./components/Settings/Settings";
-import { StateType } from "./Redux/state";
+import { store, StoreType } from "./Redux/state";
 
 type AppPropsType = {
-  state: StateType
-  addPost: (post: string) => void
+  store: StoreType
 }
 
 function App(props: AppPropsType) {
+
+  let state = props.store.getState()
+
   return (
     <div className="app-wrapper">
       <Header />
       <NavBar />
       <div className="content">
-        <Route path="/messages" render={() => <Dialogs state={props.state.messagesPage} />} />
-        <Route path="/profile" render={() => <Profile posts={props.state.profilePage.posts} addPost={props.addPost} />} />
+        <Route path="/messages" render={() => <Dialogs state={state.messagesPage}
+          onMessageChange={props.store.onMessageChange.bind(props.store)}
+          addMessage={store.addMessage.bind(props.store)} />} />
+        <Route path="/profile" render={() => <Profile state={state.profilePage}
+          addPost={props.store.addPost.bind(props.store)}
+          onPostChange={props.store.onPostChange.bind(props.store)} />} />
         <Route path="/music" render={() => <Music />} />
         <Route path="/news" render={() => <News />} />
         <Route path="/settings" render={() => <Settings />} />
