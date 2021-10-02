@@ -7,7 +7,7 @@ import { NavBar } from "./components/NavBar/NavBar";
 import { News } from "./components/News/News";
 import { Profile } from "./components/Profile/Profile";
 import { Settings } from "./components/Settings/Settings";
-import { store, StoreType } from "./Redux/store";
+import { StoreType } from "./Redux/store";
 
 type AppPropsType = {
   store: StoreType
@@ -23,11 +23,9 @@ function App(props: AppPropsType) {
       <NavBar />
       <div className="content">
         <Route path="/messages" render={() => <Dialogs state={state.messagesPage}
-          onMessageChange={props.store.onMessageChange.bind(props.store)}
-          addMessage={store.addMessage.bind(props.store)} />} />
+          dispatch={props.store.dispatch.bind(props.store)} />} />
         <Route path="/profile" render={() => <Profile state={state.profilePage}
-          addPost={props.store.addPost.bind(props.store)}
-          onPostChange={props.store.onPostChange.bind(props.store)} />} />
+          dispatch={props.store.dispatch.bind(props.store)} />} />
         <Route path="/music" render={() => <Music />} />
         <Route path="/news" render={() => <News />} />
         <Route path="/settings" render={() => <Settings />} />

@@ -1,21 +1,20 @@
 import { Post } from "./Post/Post";
 import s from "./MyPost.module.css"
 import React, { ChangeEvent } from "react";
-import { ProfilePageType } from "../../../Redux/store";
+import { ActionType, addPostAC, onPostChangeAC, ProfilePageType } from "../../../Redux/profileReducer";
 
 type MyPostPropsType = {
     state: ProfilePageType
-    onPostChange: (post: string) => void
-    addPost: () => void
+    dispatch: (action: ActionType) => void
 }
 
 export const MyPost: React.FC<MyPostPropsType> = (props) => {
 
     const addPost = () => {
-        props.addPost()
+        props.dispatch(addPostAC())
     }
     const onTextAreaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        props.onPostChange(e.currentTarget.value)
+        props.dispatch(onPostChangeAC(e.currentTarget.value))
     }
 
     return <div className={s.myPost}>

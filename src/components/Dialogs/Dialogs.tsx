@@ -1,22 +1,22 @@
 import { DialogItem } from "./DialogItem/DialogItem"
 import { MessageItem } from "./MessageItem/MessageItem"
 import s from "./Dialogs.module.css"
-import { MessagesPageType } from "../../Redux/store"
 import { ChangeEvent } from "react"
+import { addMessageAC, MessagesPageType, onMessageChangeAC } from "../../Redux/dialogsReducer"
+import { ActionType } from "../../Redux/profileReducer"
 
 type DialogsPropsType = {
     state: MessagesPageType
-    addMessage: () => void
-    onMessageChange: (value: string) => void
+    dispatch: (action: ActionType) => void
 }
 
 export const Dialogs: React.FC<DialogsPropsType> = (props) => {
 
     const addMessage = () => {
-        props.addMessage()
+        props.dispatch(addMessageAC())
     }
     const onDialogChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        props.onMessageChange(e.currentTarget.value)
+        props.dispatch(onMessageChangeAC(e.currentTarget.value))
     }
 
     return <div className={s.dialogs}>
