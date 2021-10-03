@@ -21,13 +21,29 @@ export type OnMessageChangeActionType = {
     value: string
 }
 
-export const dialogsReducer = (state: MessagesPageType, action: ActionType): MessagesPageType => {
+let initialState = {
+    messages: [
+        { message: "Hi", id: 1 },
+        { message: "How are u", id: 2 },
+        { message: "Sup", id: 3 }
+    ],
+    dialogs: [
+        { name: "Dimych", id: 1 },
+        { name: "Valera", id: 2 },
+        { name: "Vika", id: 3 },
+        { name: "Sveta", id: 4 },
+        { name: "Andrey", id: 5 },
+    ],
+    newMessageText: ""
+}
+
+export const dialogsReducer = (state: MessagesPageType = initialState, action: ActionType): MessagesPageType => {
     switch (action.type) {
         case "ADD-MESSAGE":
             if (state.newMessageText.trim() !== "") {
                 return { ...state, messages: [...state.messages, { id: 4, message: state.newMessageText }], newMessageText: "" }
             }
-            return state
+            return { ...state, newMessageText: "" }
         case "ON-MESSAGE-CHANGE":
             return { ...state, newMessageText: action.value }
         default:
