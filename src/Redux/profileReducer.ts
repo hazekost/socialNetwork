@@ -34,7 +34,6 @@ export const profileReducer = (state: ProfilePageType = initialState, action: Ac
             }
             return { ...state, newPostText: "" }
         case "ON-POST-CHANGE":
-            debugger
             return { ...state, newPostText: action.value }
         default:
             return state

@@ -1,19 +1,18 @@
+import { connect } from "react-redux"
 import { addMessageAC, onMessageChangeAC } from "../../Redux/dialogsReducer"
-import { ActionType } from "../../Redux/profileReducer"
+import { DispatchType, StateType } from "../../Redux/redux-store"
 import { Dialogs } from "./Dialogs"
 
-type DialogContainerPropsType = {
-    state: any
-    dispatch: (action: ActionType) => void
-}
-
-export const DialogsContainer: React.FC<DialogContainerPropsType> = ({ state, dispatch }) => {
-
-    const addMessage = () => {
+const mapStateToProps = (state: StateType) => ({
+    state: state.messagesPage
+})
+const mapDispatchToProps = (dispatch: DispatchType) => ({
+    addMessage: () => {
         dispatch(addMessageAC())
-    }
-    const onDialogChange = (value: string) => {
+    },
+    onDialogChange: (value: string) => {
         dispatch(onMessageChangeAC(value))
     }
-    return <Dialogs state={state} addMessage={addMessage} onDialogChange={onDialogChange} />
-}
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dialogs)
