@@ -2,11 +2,11 @@ export type ItemType = {
     id: number
     name: string
     uniqueUrlName: string | null
-    photos: { small: string | null, large: string | null }
+    photos: { small: string | undefined, large: string | undefined }
     status: string | null
     followed: boolean
 }
-type InitialStateType = {
+export type InitialStateType = {
     items: Array<ItemType>
     totalCount: number
     error: string
@@ -23,52 +23,7 @@ type SetUsersType = {
 type ActionType = FollowUnfollowActionCreatorType | SetUsersType
 
 let initialState: InitialStateType = {
-    items: [
-        {
-            "name": "antoshka_11659",
-            "id": 20040,
-            "uniqueUrlName": null,
-            "photos": {
-                "small": null,
-                "large": null
-            },
-            "status": null,
-            "followed": false
-        },
-        {
-            "name": "atnon_shurup11659",
-            "id": 20039,
-            "uniqueUrlName": null,
-            "photos": {
-                "small": null,
-                "large": null
-            },
-            "status": null,
-            "followed": false
-        },
-        {
-            "name": "Some_log",
-            "id": 20038,
-            "uniqueUrlName": null,
-            "photos": {
-                "small": null,
-                "large": null
-            },
-            "status": "dsfdg",
-            "followed": false
-        },
-        {
-            "name": "brilook",
-            "id": 20037,
-            "uniqueUrlName": null,
-            "photos": {
-                "small": null,
-                "large": null
-            },
-            "status": null,
-            "followed": false
-        }
-    ],
+    items: [],
     totalCount: 0,
     error: ""
 }

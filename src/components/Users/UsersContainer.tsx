@@ -1,6 +1,9 @@
+import axios from "axios"
 import { connect } from "react-redux"
 import { DispatchType, StateType } from "../../Redux/redux-store"
-import { followUnfollowAC, ItemType, setUsersAC } from "../../Redux/usersReducer"
+import { followUnfollowAC, InitialStateType, ItemType, setUsersAC } from "../../Redux/usersReducer"
+import avatar from "../../assets/avatar.jpg"
+import React from "react"
 
 type UsersPropsType = {
     state: Array<ItemType>
@@ -8,27 +11,38 @@ type UsersPropsType = {
     setUsers: (items: Array<ItemType>) => void
 }
 
-const Users: React.FC<UsersPropsType> = (props) => {
-    return <div>
-        {props.state.map(u => {
+class Users extends React.Component<UsersPropsType> {
 
-            const toggleFollow = () => {
-                props.toggleFollow(u.id, !u.followed)
-            }
+    componentDidMount() {
+        axios.get<InitialStateType>("https://social-network.samuraijs.com/api/1.0/users").then((resp) => {
+            this.props.setUsers(resp.data.items)
+        })
+    }
 
-            return <div key={u.id}>
-                <span>
-                    <img style={{ width: "50px" }} src="https://icon-library.com/images/avatar-icon-png/avatar-icon-png-15.jpg" alt="" />
-                </span>
-                <span>
-                    {u.name}
-                </span>
-                <div>
-                    <button onClick={toggleFollow}>{u.followed ? "UnFollow" : "Folow"}</button>
+    render() {
+        return <div>
+            {this.props.state.map(u => {
+
+                const toggleFollow = () => {
+                    this.props.toggleFollow(u.id, !u.followed)
+                }
+
+                return <div key={u.id}>
+                    <span>
+                        <img style={{ width: "50px" }}
+                            src={u.photos.small ? u.photos.small : avatar}
+                            alt="" />
+                    </span>
+                    <span>
+                        {u.name}
+                    </span>
+                    <div>
+                        <button onClick={toggleFollow}>{u.followed ? "UnFollow" : "Folow"}</button>
+                    </div>
                 </div>
-            </div>
-        })}
-    </div>
+            })}
+        </div>
+    }
 }
 
 const mapStateToProps = (state: StateType) => ({
