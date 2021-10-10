@@ -1,5 +1,3 @@
-import { ActionType } from "./profileReducer"
-
 type DialogType = {
     name: string
     id: number
@@ -13,13 +11,7 @@ export type MessagesPageType = {
     dialogs: Array<DialogType>
     newMessageText: string
 }
-export type AddMessageActionType = {
-    type: "ADD-MESSAGE"
-}
-export type OnMessageChangeActionType = {
-    type: "ON-MESSAGE-CHANGE",
-    value: string
-}
+type ActionType = AddMessageActionType | OnMessageChangeActionType
 
 let initialState = {
     messages: [
@@ -49,6 +41,14 @@ export const dialogsReducer = (state: MessagesPageType = initialState, action: A
         default:
             return state
     }
+}
+
+type AddMessageActionType = {
+    type: "ADD-MESSAGE"
+}
+type OnMessageChangeActionType = {
+    type: "ON-MESSAGE-CHANGE",
+    value: string
 }
 
 export const addMessageAC = (): AddMessageActionType => ({ type: "ADD-MESSAGE" })

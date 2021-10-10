@@ -1,5 +1,5 @@
 import { connect } from "react-redux"
-import { addMessageAC, onMessageChangeAC } from "../../Redux/dialogsReducer"
+import { addMessageAC, onMessageChangeAC } from "../../Redux/dialogs-reducer"
 import { DispatchType, StateType } from "../../Redux/redux-store"
 import { Dialogs } from "./Dialogs"
 

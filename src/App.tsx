@@ -14,7 +14,7 @@ function App() {
       <NavBar />
       <div className="content">
         <Route path="/messages" render={() => <DialogsContainer />} />
-        <Route path="/profile" render={() => <ProfileContainer />} />
+        <Route path="/profile/:userId?" render={() => <ProfileContainer />} />
         <Route path="/users" render={() => <UsersContainer />} />
       </div>
     </div>

@@ -1,56 +1,59 @@
-import axios from "axios"
-import { connect } from "react-redux"
-import { DispatchType, StateType } from "../../Redux/redux-store"
-import { followUnfollowAC, InitialStateType, ItemType, setUsersAC } from "../../Redux/usersReducer"
-import avatar from "../../assets/avatar.jpg"
 import React from "react"
+import axios from "axios"
+import { Users } from "./Users"
+import { connect } from "react-redux"
+import { StateType } from "../../Redux/redux-store"
+import { followUnfollow, GetType, setCurrentPage, setUsers, toggleFetch, UsersStateType } from "../../Redux/users-reducer"
+import { Preloader } from "../common/Preloader"
 
 type UsersPropsType = {
-    state: Array<ItemType>
-    toggleFollow: (id: number, follow: boolean) => void
-    setUsers: (items: Array<ItemType>) => void
+    state: UsersStateType
+    followUnfollow: (id: number, follow: boolean) => void
+    setUsers: (data: GetType) => void
+    setCurrentPage: (page: number) => void
+    toggleFetch: (fetch: boolean) => void
 }
 
-class Users extends React.Component<UsersPropsType> {
+export class UsersContainer extends React.Component<UsersPropsType> {
 
     componentDidMount() {
-        axios.get<InitialStateType>("https://social-network.samuraijs.com/api/1.0/users").then((resp) => {
-            this.props.setUsers(resp.data.items)
-        })
+        this.props.toggleFetch(true)
+        axios.get<GetType>(`https://social-network.samuraijs.com/api/1.0/users?count=${this.props.state.pageSize}&page=${this.props.state.currentPage}`)
+            .then((resp) => {
+                this.props.setUsers(resp.data)
+                this.props.toggleFetch(false)
+            })
+    }
+
+    onPageChanged = (page: number) => {
+        this.props.toggleFetch(true)
+        this.props.setCurrentPage(page)
+        axios.get<GetType>(`https://social-network.samuraijs.com/api/1.0/users?count=${this.props.state.pageSize}&page=${page}`)
+            .then((resp) => {
+                this.props.setUsers(resp.data)
+                this.props.toggleFetch(false)
+            })
     }
 
     render() {
-        return <div>
-            {this.props.state.map(u => {
+        let { currentPage, items, pageSize, totalCount, isFetching } = this.props.state
 
-                const toggleFollow = () => {
-                    this.props.toggleFollow(u.id, !u.followed)
-                }
-
-                return <div key={u.id}>
-                    <span>
-                        <img style={{ width: "50px" }}
-                            src={u.photos.small ? u.photos.small : avatar}
-                            alt="" />
-                    </span>
-                    <span>
-                        {u.name}
-                    </span>
-                    <div>
-                        <button onClick={toggleFollow}>{u.followed ? "UnFollow" : "Folow"}</button>
-                    </div>
-                </div>
-            })}
-        </div>
+        return <>
+            {isFetching ? <Preloader />
+                : <Users currentPage={currentPage} items={items} pageSize={pageSize}
+                    totalCount={totalCount} onPageChanged={this.onPageChanged} toggleFollow={this.props.followUnfollow} />}
+        </>
     }
 }
 
 const mapStateToProps = (state: StateType) => ({
-    state: state.usersPage.items
+    state: state.usersPage
 })
-const mapDispatchToProps = (dispatch: DispatchType) => ({
-    toggleFollow: (id: number, followed: boolean) => dispatch(followUnfollowAC(id, followed)),
-    setUsers: (items: Array<ItemType>) => dispatch(setUsersAC(items))
-})
+// const mapDispatchToProps = (dispatch: DispatchType) => ({
+//     toggleFollow: (id: number, followed: boolean) => dispatch(followUnfollowAC(id, followed)),
+//     setUsers: (data: GetType) => dispatch(setUsersAC(data)),
+//     setPage: (page: number) => dispatch(setCurrentPageAC(page)),
+//     toggleFetch: (fetch: boolean) => dispatch(toggleFetchAC(fetch)),
+// })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Users)
+export default connect(mapStateToProps, { followUnfollow, setUsers, setCurrentPage, toggleFetch })(UsersContainer)
