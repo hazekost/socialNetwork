@@ -1,6 +1,6 @@
 import { connect } from "react-redux"
-import { addMessageAC, onMessageChangeAC } from "../../Redux/dialogs-reducer"
-import { DispatchType, StateType } from "../../Redux/redux-store"
+import { addMessageAC, onMessageChangeAC } from "../../redux/dialogs-reducer"
+import { DispatchType, StateType } from "../../redux/redux-store"
 import { Dialogs } from "./Dialogs"
 
 const mapStateToProps = (state: StateType) => ({

@@ -1,15 +1,17 @@
 import s from "./Users.module.css"
 import avatar from "../../assets/avatar.jpg"
-import { ItemType } from "../../Redux/users-reducer"
 import { NavLink } from "react-router-dom"
+import { ItemType } from "../../api/api"
 
 type UsersPropsType = {
     totalCount: number
     pageSize: number
     currentPage: number
     items: Array<ItemType>
+    followingInProgress: Array<number>
     onPageChanged: (page: number) => void
-    toggleFollow: (id: number, followed: boolean) => void
+    follow: (id: number) => void
+    unFollow: (id: number) => void
 }
 
 export const Users: React.FC<UsersPropsType> = (props) => {
@@ -30,20 +32,21 @@ export const Users: React.FC<UsersPropsType> = (props) => {
         </div>
         {props.items.map(u => {
 
-            const toggleFollow = () => {
-                props.toggleFollow(u.id, !u.followed)
-            }
+            const follow = () => props.follow(u.id)
+            const unFollow = () => props.unFollow(u.id)
 
             return <div key={u.id}>
                 <span>
-                    <NavLink to={`profile/${u.id}`}><img className={s.userAva} alt=""
-                        src={u.photos.large ? u.photos.large : avatar} /></NavLink>
+                    <NavLink to={`profile/${u.id}`}>
+                        <img className={s.userAva} alt="" src={u.photos.large ? u.photos.large : avatar} />
+                    </NavLink>
                 </span>
                 <span>
                     {u.name}
                 </span>
                 <div>
-                    <button onClick={toggleFollow}>{u.followed ? "UnFollow" : "Folow"}</button>
+                    {u.followed ? <button disabled={props.followingInProgress.some(id => id === u.id)} onClick={unFollow}>UnFollow</button>
+                        : <button disabled={props.followingInProgress.some(id => id === u.id)} onClick={follow}>Follow</button>}
                 </div>
             </div>
         })}

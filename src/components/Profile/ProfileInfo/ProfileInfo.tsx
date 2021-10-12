@@ -1,6 +1,6 @@
 import s from "./ProfileInfo.module.css"
 import avatar from "../../../assets/avatar.jpg"
-import { UserProfileType } from "../../../Redux/profile-reducer"
+import { UserProfileType } from "../../../redux/profile-reducer"
 
 type ProfileInfoPropsType = {
     userProfile: UserProfileType

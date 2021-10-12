@@ -1,11 +1,5 @@
-export type ItemType = {
-    id: number
-    name: string
-    uniqueUrlName: string | null
-    photos: { small: string | undefined, large: string | undefined }
-    status: string | null
-    followed: boolean
-}
+import { GetUsersType, ItemType } from "../api/api"
+
 export type UsersStateType = {
     items: Array<ItemType>
     totalCount: number
@@ -13,13 +7,10 @@ export type UsersStateType = {
     pageSize: number
     currentPage: number
     isFetching: boolean
+    followingInProgress: Array<number>
 }
-export type GetType = {
-    items: Array<ItemType>
-    totalCount: number
-    error: string
-}
-type ActionType = FollowUnfollowActionType | SetUsersActionType | SetCurrentPageActionType | ToggleFetchActionType
+type ActionType = FollowActionType | UnFollowActionType | SetUsersActionType
+    | SetCurrentPageActionType | ToggleFetchActionType | ToggleFollowingActionType
 
 
 let initialState: UsersStateType = {
@@ -29,44 +20,42 @@ let initialState: UsersStateType = {
     pageSize: 10,
     currentPage: 1,
     isFetching: false,
+    followingInProgress: [2, 3],
 }
 
 export const userReducer = (state: UsersStateType = initialState, action: ActionType): UsersStateType => {
     switch (action.type) {
-        case "FOLLOW-UNFOLLOW":
-            return { ...state, items: state.items.map(i => i.id === action.id ? { ...i, followed: action.followed } : i) }
-        case "SET-USERS":
+        case "SET_USERS":
             return { ...state, ...action.data }
-        case "SET-CURRENT-PAGE":
+        case "SET_CURRENT_PAGE":
             return { ...state, currentPage: action.page }
-        case "TOGGLE-FETCH":
-            return { ...state, isFetching: action.fetch }
+        case "TOGGLE_FETCH":
+            return { ...state, isFetching: action.isFetching }
+        case "FOLLOW":
+            return { ...state, items: state.items.map(i => i.id === action.id ? { ...i, followed: true } : i) }
+        case "UNFOLLOW":
+            return { ...state, items: state.items.map(i => i.id === action.id ? { ...i, followed: false } : i) }
+        case "TOGGLE_FOLLOWING":
+            return {
+                ...state, followingInProgress: action.isFetching
+                    ? [...state.followingInProgress, action.id]
+                    : state.followingInProgress.filter(id => id !== action.id)
+            }
         default:
             return state
     }
 }
 
-type FollowUnfollowActionType = {
-    type: "FOLLOW-UNFOLLOW"
-    id: number
-    followed: boolean
-}
-type SetUsersActionType = {
-    type: "SET-USERS"
-    data: GetType
-}
-type SetCurrentPageActionType = {
-    type: "SET-CURRENT-PAGE"
-    page: number
-}
-type ToggleFetchActionType = {
-    type: "TOGGLE-FETCH"
-    fetch: boolean
-}
+type FollowActionType = ReturnType<typeof follow>
+type UnFollowActionType = ReturnType<typeof unFollow>
+type SetUsersActionType = ReturnType<typeof setUsers>
+type SetCurrentPageActionType = ReturnType<typeof setCurrentPage>
+type ToggleFetchActionType = ReturnType<typeof toggleFetch>
+type ToggleFollowingActionType = ReturnType<typeof toggleFollowing>
 
-export const followUnfollow = (id: number, followed: boolean): FollowUnfollowActionType => (
-    { type: "FOLLOW-UNFOLLOW", id, followed }
-)
-export const setUsers = (data: GetType): SetUsersActionType => ({ type: "SET-USERS", data })
-export const setCurrentPage = (page: number): SetCurrentPageActionType => ({ type: "SET-CURRENT-PAGE", page })
-export const toggleFetch = (fetch: boolean): ToggleFetchActionType => ({ type: "TOGGLE-FETCH", fetch })
+export const follow = (id: number) => ({ type: "FOLLOW" as const, id })
+export const unFollow = (id: number) => ({ type: "UNFOLLOW" as const, id })
+export const setUsers = (data: GetUsersType) => ({ type: "SET_USERS" as const, data })
+export const setCurrentPage = (page: number) => ({ type: "SET_CURRENT_PAGE" as const, page })
+export const toggleFetch = (isFetching: boolean) => ({ type: "TOGGLE_FETCH" as const, isFetching })
+export const toggleFollowing = (id: number, isFetching: boolean) => ({ type: "TOGGLE_FOLLOWING" as const, id, isFetching })

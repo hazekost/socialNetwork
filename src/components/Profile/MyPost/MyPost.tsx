@@ -1,7 +1,7 @@
 import { Post } from "./Post/Post";
 import s from "./MyPost.module.css"
 import React, { ChangeEvent } from "react";
-import { ProfilePageType } from "../../../Redux/profile-reducer";
+import { ProfilePageType } from "../../../redux/profile-reducer";
 
 type MyPostPropsType = {
     state: ProfilePageType
