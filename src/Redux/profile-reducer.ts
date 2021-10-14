@@ -1,3 +1,6 @@
+import { Dispatch } from "redux"
+import { socialAPI } from "../api/api"
+
 type PostType = {
     post: string
     id: number
@@ -83,12 +86,19 @@ type SetUserProfileActionType = {
     profile: UserProfileType
 }
 
-export const addPostAC = (): AddPostActionType => ({ type: "ADD-POST" })
-export const onPostChangeAC = (value: string): OnPostChangeActionType => ({
+export const addPost = (): AddPostActionType => ({ type: "ADD-POST" })
+export const onPostChange = (value: string): OnPostChangeActionType => ({
     type: "ON-POST-CHANGE",
     value
 })
-export const setUserProfileAC = (profile: UserProfileType): SetUserProfileActionType => ({
+const setUserProfile = (profile: UserProfileType): SetUserProfileActionType => ({
     type: "SET-USER-PROFILE",
     profile
 })
+
+export const getUserProfile = (id: string) => (dispatch: Dispatch) => {
+    socialAPI.getUserProfile(id)
+        .then(resp => {
+            dispatch(setUserProfile(resp.data))
+        })
+}

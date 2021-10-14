@@ -1,4 +1,5 @@
-import { GetUsersType, ItemType } from "../api/api"
+import { Dispatch } from "redux"
+import { GetUsersType, ItemType, socialAPI } from "../api/api"
 
 export type UsersStateType = {
     items: Array<ItemType>
@@ -20,7 +21,7 @@ let initialState: UsersStateType = {
     pageSize: 10,
     currentPage: 1,
     isFetching: false,
-    followingInProgress: [2, 3],
+    followingInProgress: [],
 }
 
 export const userReducer = (state: UsersStateType = initialState, action: ActionType): UsersStateType => {
@@ -53,9 +54,43 @@ type SetCurrentPageActionType = ReturnType<typeof setCurrentPage>
 type ToggleFetchActionType = ReturnType<typeof toggleFetch>
 type ToggleFollowingActionType = ReturnType<typeof toggleFollowing>
 
-export const follow = (id: number) => ({ type: "FOLLOW" as const, id })
-export const unFollow = (id: number) => ({ type: "UNFOLLOW" as const, id })
-export const setUsers = (data: GetUsersType) => ({ type: "SET_USERS" as const, data })
-export const setCurrentPage = (page: number) => ({ type: "SET_CURRENT_PAGE" as const, page })
-export const toggleFetch = (isFetching: boolean) => ({ type: "TOGGLE_FETCH" as const, isFetching })
-export const toggleFollowing = (id: number, isFetching: boolean) => ({ type: "TOGGLE_FOLLOWING" as const, id, isFetching })
+const follow = (id: number) => ({ type: "FOLLOW" as const, id })
+const unFollow = (id: number) => ({ type: "UNFOLLOW" as const, id })
+const setUsers = (data: GetUsersType) => ({ type: "SET_USERS" as const, data })
+const setCurrentPage = (page: number) => ({ type: "SET_CURRENT_PAGE" as const, page })
+const toggleFetch = (isFetching: boolean) => ({ type: "TOGGLE_FETCH" as const, isFetching })
+const toggleFollowing = (id: number, isFetching: boolean) => ({ type: "TOGGLE_FOLLOWING" as const, id, isFetching })
+
+export const getUsersTC = (pageSize: number, currentPage: number) => (dispatch: Dispatch<ActionType>) => {
+    dispatch(toggleFetch(true))
+    socialAPI.getUsers(pageSize, currentPage).then((resp) => {
+        dispatch(setUsers(resp.data))
+        dispatch(toggleFetch(false))
+    })
+}
+export const changeUsersPageTC = (pageSize: number, page: number) => (dispatch: Dispatch<ActionType>) => {
+    dispatch(toggleFetch(true))
+    dispatch(setCurrentPage(page))
+    socialAPI.getUsers(pageSize, page).then((resp) => {
+        dispatch(setUsers(resp.data))
+        dispatch(toggleFetch(false))
+    })
+}
+export const setFollowTC = (id: number) => (dispatch: Dispatch<ActionType>) => {
+    dispatch(toggleFollowing(id, true))
+    socialAPI.follow(id).then((res) => {
+        if (res.data.resultCode === 0) {
+            dispatch(follow(id))
+        }
+        dispatch(toggleFollowing(id, false))
+    })
+}
+export const setUnFollowTC = (id: number) => (dispatch: Dispatch<ActionType>) => {
+    dispatch(toggleFollowing(id, true))
+    socialAPI.unFollow(id).then((res) => {
+        if (res.data.resultCode === 0) {
+            dispatch(unFollow(id))
+        }
+        dispatch(toggleFollowing(id, false))
+    })
+}

@@ -1,18 +1,18 @@
-import axios from "axios"
 import React from "react"
 import { connect } from "react-redux"
-import { RouteComponentProps, withRouter } from "react-router"
-import { addPostAC, onPostChangeAC, ProfilePageType, setUserProfileAC, UserProfileType } from "../../redux/profile-reducer"
-import { DispatchType, StateType } from "../../redux/redux-store"
+import { Redirect, RouteComponentProps, withRouter } from "react-router"
+import { addPost, getUserProfile, onPostChange, ProfilePageType } from "../../redux/profile-reducer"
+import { StateType } from "../../redux/redux-store"
 import { MyPost } from "./MyPost/MyPost"
 import s from "./ProfileContainer.module.css"
 import { ProfileInfo } from "./ProfileInfo/ProfileInfo"
 
 type ProfilePropsType = {
     state: ProfilePageType
+    isAuth: boolean
     addPost: () => void
     onPostChange: (value: string) => void
-    setProfile: (profile: UserProfileType) => void
+    getUserProfile: (id: string) => void
 }
 type PathParamsType = {
     userId: string
@@ -22,14 +22,18 @@ type PropsType = RouteComponentProps<PathParamsType> & ProfilePropsType
 class ProfileContainer extends React.Component<PropsType> {
     componentDidMount() {
         let userId = this.props.match.params.userId
-        axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${userId ? userId : 2}`)
-            .then(resp => {
-                this.props.setProfile(resp.data)
-            })
+        if (!userId) {
+            userId = "2"
+        }
+        this.props.getUserProfile(userId)
     }
 
     render() {
         let { userProfile } = this.props.state
+
+        if (!this.props.isAuth) {
+            return <Redirect to={"/login"} />
+        }
 
         return <div className={s.profile}>
             <ProfileInfo userProfile={userProfile} />
@@ -39,18 +43,8 @@ class ProfileContainer extends React.Component<PropsType> {
 }
 
 const mapStateToProps = (state: StateType) => ({
-    state: state.profilePage
-})
-const mapDispatchToProps = (dispatch: DispatchType) => ({
-    addPost: () => {
-        dispatch(addPostAC())
-    },
-    onPostChange: (value: string) => {
-        dispatch(onPostChangeAC(value))
-    },
-    setProfile: (profile: UserProfileType) => {
-        dispatch(setUserProfileAC(profile))
-    }
+    state: state.profilePage,
+    isAuth: state.auth.isAuth
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProfileContainer))
+export default connect(mapStateToProps, { addPost, onPostChange, getUserProfile })(withRouter(ProfileContainer))

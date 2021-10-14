@@ -1,4 +1,5 @@
-import { DataType } from "../api/api"
+import { Dispatch } from "redux"
+import { DataType, socialAPI } from "../api/api"
 
 enum AUTH_TYPES {
     SET_AUTH = "SET_AUTH"
@@ -29,7 +30,15 @@ export const authReducer = (state: AuthStateType = initialAuthState, action: Act
 
 type SetAuthActionType = ReturnType<typeof setAuth>
 
-export const setAuth = (data: DataType) => ({
+const setAuth = (data: DataType) => ({
     type: AUTH_TYPES.SET_AUTH,
     data,
 })
+
+export const getAuthTC = () => (dispatch: Dispatch<ActionType>) => {
+    socialAPI.authMe().then((res) => {
+        if (res.data.resultCode === 0) {
+            dispatch(setAuth(res.data.data))
+        }
+    })
+}

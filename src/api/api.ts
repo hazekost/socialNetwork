@@ -50,5 +50,8 @@ export const socialAPI = {
     },
     unFollow(id: number) {
         return instance.delete<followUnfollowResponseType>(`follow/${id}`)
+    },
+    getUserProfile(id: string) {
+        return instance.get(`/profile/${id}`)
     }
 }
