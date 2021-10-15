@@ -29,6 +29,29 @@ export type GetUsersType = {
     totalCount: number
     error: string
 }
+export type UserProfileType = {
+    aboutMe: string
+    contacts: {
+        facebook: string
+        website: string
+        vk: string
+        twitter: string
+        instagram: string
+        youtube: string
+        github: string
+        mainLink: string
+    }
+    lookingForAJob: boolean
+    lookingForAJobDescription: string
+    fullName: string
+    userId: number
+    photos: { small: string, large: string }
+}
+type UpdateMyStatusResponseType = {
+    resultCode: number
+    messages: Array<string>
+    data: {}
+}
 
 const instance = axios.create({
     baseURL: "https://social-network.samuraijs.com/api/1.0/",
@@ -52,6 +75,12 @@ export const socialAPI = {
         return instance.delete<followUnfollowResponseType>(`follow/${id}`)
     },
     getUserProfile(id: string) {
-        return instance.get(`/profile/${id}`)
+        return instance.get<UserProfileType>(`/profile/${id}`)
+    },
+    getUserStatus(id: string) {
+        return instance.get<string>(`profile/status/${id}`)
+    },
+    updateMyStatus(status: string) {
+        return instance.put<{ status: string }, AxiosResponse<UpdateMyStatusResponseType>>(`profile/status`, { status })
     }
 }

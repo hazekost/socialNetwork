@@ -1,19 +1,18 @@
 import s from "./ProfileInfo.module.css"
 import avatar from "../../../assets/avatar.jpg"
-import { UserProfileType } from "../../../redux/profile-reducer"
+import { UserProfileType } from "../../../api/api"
+import { ProfileStatus } from "./ProfileStatus"
 
 type ProfileInfoPropsType = {
-    userProfile: UserProfileType
+    userProfile: UserProfileType | null
+    userStatus: string
+    updateMyStatus: (status: string) => void
 }
 
 export function ProfileInfo(props: ProfileInfoPropsType) {
-    return <div>
-        <div className={s.wall}>
-            <img src="https://p4.wallpaperbetter.com/wallpaper/500/442/354/outrun-vaporwave-hd-wallpaper-preview.jpg" alt="" />
-        </div>
-        <div className={s.description}>
-            <img src={props.userProfile.photos.large ? props.userProfile.photos.large : avatar} alt="" />
-            <span>{props.userProfile.fullName}</span>
-        </div>
+    return <div className={s.description}>
+        <img src={props.userProfile?.photos.large ? props.userProfile.photos.large : avatar} alt="" />
+        <span>{props.userProfile?.fullName}</span>
+        <ProfileStatus status={props.userStatus} updateMyStatus={props.updateMyStatus} />
     </div>
 }
