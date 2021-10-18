@@ -1,5 +1,5 @@
 import { Dispatch } from "redux"
-import { socialAPI, UserProfileType } from "../api/api"
+import { profileAPI, UserProfileType } from "../api/api"
 
 type PostType = {
     post: string
@@ -8,7 +8,6 @@ type PostType = {
 }
 export type ProfilePageType = {
     posts: Array<PostType>
-    newPostText: string
     userProfile: UserProfileType | null
     userStatus: string
 }
@@ -20,7 +19,6 @@ let initialState: ProfilePageType = {
         { post: "Hi, how are you", id: 1, likesCount: 21 },
         { post: "How your it-kamasutra", id: 2, likesCount: 15 }
     ],
-    newPostText: "",
     userProfile: null,
     userStatus: "",
 }
@@ -28,12 +26,7 @@ let initialState: ProfilePageType = {
 export const profileReducer = (state: ProfilePageType = initialState, action: ActionType): ProfilePageType => {
     switch (action.type) {
         case "ADD-POST":
-            if (state.newPostText.trim() !== "") {
-                return { ...state, posts: [...state.posts, { id: 4, post: state.newPostText, likesCount: 0 }], newPostText: "" }
-            }
-            return { ...state, newPostText: "" }
-        case "ON-POST-CHANGE":
-            return { ...state, newPostText: action.value }
+            return { ...state, posts: [...state.posts, { id: 4, post: action.text, likesCount: 0 }] }
         case "SET-USER-PROFILE":
             return { ...state, userProfile: action.profile }
         case "SET-USER-STATUS":
@@ -45,6 +38,7 @@ export const profileReducer = (state: ProfilePageType = initialState, action: Ac
 
 type AddPostActionType = {
     type: "ADD-POST"
+    text: string
 }
 type OnPostChangeActionType = {
     type: "ON-POST-CHANGE"
@@ -59,11 +53,7 @@ type SetUserStatusActionType = {
     status: string
 }
 
-export const addPost = (): AddPostActionType => ({ type: "ADD-POST" })
-export const onPostChange = (value: string): OnPostChangeActionType => ({
-    type: "ON-POST-CHANGE",
-    value
-})
+export const addPost = (text: string): AddPostActionType => ({ type: "ADD-POST", text })
 const setUserProfile = (profile: UserProfileType): SetUserProfileActionType => ({
     type: "SET-USER-PROFILE",
     profile
@@ -74,19 +64,19 @@ const setUserStatus = (status: string): SetUserStatusActionType => ({
 })
 
 export const getUserProfile = (id: string) => (dispatch: Dispatch) => {
-    socialAPI.getUserProfile(id)
+    profileAPI.getProfile(id)
         .then(resp => {
             dispatch(setUserProfile(resp.data))
         })
 }
 export const getUserStatus = (id: string) => (dispatch: Dispatch) => {
-    socialAPI.getUserStatus(id)
+    profileAPI.getStatus(id)
         .then(resp => {
             dispatch(setUserStatus(resp.data))
         })
 }
 export const updateMyStatus = (status: string) => (dispatch: Dispatch) => {
-    socialAPI.updateMyStatus(status)
+    profileAPI.updateMyStatus(status)
         .then(res => {
             if (res.data.resultCode === 0) {
                 dispatch(setUserStatus(status))

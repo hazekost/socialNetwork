@@ -1,5 +1,5 @@
 import { Dispatch } from "redux"
-import { GetUsersType, ItemType, socialAPI } from "../api/api"
+import { GetUsersResponseType, ItemType, usersAPI } from "../api/api"
 
 export type UsersStateType = {
     items: Array<ItemType>
@@ -56,14 +56,14 @@ type ToggleFollowingActionType = ReturnType<typeof toggleFollowing>
 
 const follow = (id: number) => ({ type: "FOLLOW" as const, id })
 const unFollow = (id: number) => ({ type: "UNFOLLOW" as const, id })
-const setUsers = (data: GetUsersType) => ({ type: "SET_USERS" as const, data })
+const setUsers = (data: GetUsersResponseType) => ({ type: "SET_USERS" as const, data })
 const setCurrentPage = (page: number) => ({ type: "SET_CURRENT_PAGE" as const, page })
 const toggleFetch = (isFetching: boolean) => ({ type: "TOGGLE_FETCH" as const, isFetching })
 const toggleFollowing = (id: number, isFetching: boolean) => ({ type: "TOGGLE_FOLLOWING" as const, id, isFetching })
 
 export const getUsersTC = (pageSize: number, currentPage: number) => (dispatch: Dispatch<ActionType>) => {
     dispatch(toggleFetch(true))
-    socialAPI.getUsers(pageSize, currentPage).then((resp) => {
+    usersAPI.getUsers(pageSize, currentPage).then((resp) => {
         dispatch(setUsers(resp.data))
         dispatch(toggleFetch(false))
     })
@@ -71,14 +71,14 @@ export const getUsersTC = (pageSize: number, currentPage: number) => (dispatch: 
 export const changeUsersPageTC = (pageSize: number, page: number) => (dispatch: Dispatch<ActionType>) => {
     dispatch(toggleFetch(true))
     dispatch(setCurrentPage(page))
-    socialAPI.getUsers(pageSize, page).then((resp) => {
+    usersAPI.getUsers(pageSize, page).then((resp) => {
         dispatch(setUsers(resp.data))
         dispatch(toggleFetch(false))
     })
 }
 export const setFollowTC = (id: number) => (dispatch: Dispatch<ActionType>) => {
     dispatch(toggleFollowing(id, true))
-    socialAPI.follow(id).then((res) => {
+    usersAPI.follow(id).then((res) => {
         if (res.data.resultCode === 0) {
             dispatch(follow(id))
         }
@@ -87,7 +87,7 @@ export const setFollowTC = (id: number) => (dispatch: Dispatch<ActionType>) => {
 }
 export const setUnFollowTC = (id: number) => (dispatch: Dispatch<ActionType>) => {
     dispatch(toggleFollowing(id, true))
-    socialAPI.unFollow(id).then((res) => {
+    usersAPI.unFollow(id).then((res) => {
         if (res.data.resultCode === 0) {
             dispatch(unFollow(id))
         }

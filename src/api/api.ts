@@ -1,20 +1,15 @@
 import axios, { AxiosResponse } from "axios";
 
 export type DataType = {
-    id: number
-    login: string
-    email: string
+    id: number | null
+    login: string | null
+    email: string | null
 }
-type authResponseType = {
-    data: DataType
-    messages: Array<string>
-    fieldsErrors: Array<string>
-    resultCode: number
-}
-type followUnfollowResponseType = {
+type AuthResponseType = ResponseType<DataType> & { fieldsErrors: Array<string> }
+type ResponseType<D = {}> = {
     resultCode: number
     messages: Array<string>
-    data: Object
+    data: D
 }
 export type ItemType = {
     id: number
@@ -24,7 +19,7 @@ export type ItemType = {
     status: string | null
     followed: boolean
 }
-export type GetUsersType = {
+export type GetUsersResponseType = {
     items: Array<ItemType>
     totalCount: number
     error: string
@@ -47,11 +42,6 @@ export type UserProfileType = {
     userId: number
     photos: { small: string, large: string }
 }
-type UpdateMyStatusResponseType = {
-    resultCode: number
-    messages: Array<string>
-    data: {}
-}
 
 const instance = axios.create({
     baseURL: "https://social-network.samuraijs.com/api/1.0/",
@@ -61,26 +51,38 @@ const instance = axios.create({
     }
 })
 
-export const socialAPI = {
+export const authAPI = {
     authMe() {
-        return instance.get<authResponseType>(`auth/me`)
+        return instance.get<AuthResponseType>(`auth/me`)
     },
-    getUsers(pageSize: number, page: number) {
-        return instance.get<GetUsersType>(`users?count=${pageSize}&page=${page}`)
+    logIn(email: string, password: string, rememberMe: boolean) {
+        return instance.post<{}, AxiosResponse<ResponseType<{ userId: number }>>>(`auth/login`, { email, password, rememberMe })
     },
-    follow(id: number) {
-        return instance.post<any, AxiosResponse<followUnfollowResponseType>>(`follow/${id}`)
-    },
-    unFollow(id: number) {
-        return instance.delete<followUnfollowResponseType>(`follow/${id}`)
-    },
-    getUserProfile(id: string) {
+    logOut() {
+        return instance.delete<ResponseType>(`auth/login`)
+    }
+}
+
+export const profileAPI = {
+    getProfile(id: string) {
         return instance.get<UserProfileType>(`/profile/${id}`)
     },
-    getUserStatus(id: string) {
+    getStatus(id: string) {
         return instance.get<string>(`profile/status/${id}`)
     },
     updateMyStatus(status: string) {
-        return instance.put<{ status: string }, AxiosResponse<UpdateMyStatusResponseType>>(`profile/status`, { status })
-    }
+        return instance.put<{}, AxiosResponse<ResponseType>>(`profile/status`, { status })
+    },
+}
+
+export const usersAPI = {
+    getUsers(pageSize: number, page: number) {
+        return instance.get<GetUsersResponseType>(`users?count=${pageSize}&page=${page}`)
+    },
+    follow(id: number) {
+        return instance.post<{}, AxiosResponse<ResponseType>>(`follow/${id}`)
+    },
+    unFollow(id: number) {
+        return instance.delete<ResponseType>(`follow/${id}`)
+    },
 }
