@@ -3,10 +3,10 @@ import { connect } from "react-redux"
 import { compose } from "redux"
 import { withAuthRedirect } from "../../hoc/withAuthRedirect"
 import { addMessage, MessagesPageType } from "../../redux/dialogs-reducer"
-import { StateType } from "../../redux/redux-store"
+import { AppRootStateType } from "../../redux/redux-store"
 import { Dialogs } from "./Dialogs"
 
-const mapStateToProps = (state: StateType): { state: MessagesPageType } => ({
+const mapStateToProps = (state: AppRootStateType): { state: MessagesPageType } => ({
     state: state.messagesPage,
 })
 

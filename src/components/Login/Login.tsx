@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router";
 import { login } from "../../redux/auth-reducer";
-import { StateType } from "../../redux/redux-store";
+import { AppRootStateType } from "../../redux/redux-store";
 import s from "./Login.module.css"
 
 function validateEmail(value: string) {
@@ -84,7 +84,7 @@ const Login: React.FC<LoginPropsType> = (props) => {
     </div>
 }
 
-const mapStateToProps = (state: StateType) => ({
+const mapStateToProps = (state: AppRootStateType) => ({
     isAuth: state.auth.isAuth
 })
 

@@ -1,7 +1,7 @@
 import React from "react"
 import { Users } from "./Users"
 import { connect } from "react-redux"
-import { StateType } from "../../redux/redux-store"
+import { AppRootStateType } from "../../redux/redux-store"
 import { changeUsersPageTC, getUsersTC, setFollowTC, setUnFollowTC, UsersStateType } from "../../redux/users-reducer"
 import { Preloader } from "../common/Preloader"
 
@@ -41,7 +41,7 @@ export class UsersContainer extends React.Component<UsersPropsType> {
     }
 }
 
-const mapStateToProps = (state: StateType) => ({
+const mapStateToProps = (state: AppRootStateType) => ({
     state: state.usersPage
 })
 

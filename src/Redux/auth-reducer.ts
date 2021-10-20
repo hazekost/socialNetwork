@@ -1,7 +1,7 @@
 import { Dispatch } from "redux"
 import { ThunkAction } from "redux-thunk"
 import { authAPI, DataType } from "../api/api"
-import { StateType } from "./redux-store"
+import { AppRootStateType } from "./redux-store"
 
 enum AUTH_TYPES {
     SET_AUTH = "SET_AUTH",
@@ -40,13 +40,13 @@ const setAuth = (data: DataType) => ({ type: AUTH_TYPES.SET_AUTH, data })
 const delAuth = (data: DataType) => ({ type: AUTH_TYPES.DEL_AUTH, data })
 
 export const getAuthTC = () => (dispatch: Dispatch<AuthActionTypes>) => {
-    authAPI.authMe().then((res) => {
+    return authAPI.authMe().then((res) => {
         if (res.data.resultCode === 0) {
             dispatch(setAuth(res.data.data))
         }
     })
 }
-export const login = (email: string, password: string, rememberMe: boolean): ThunkAction<void, StateType, unknown, AuthActionTypes> =>
+export const login = (email: string, password: string, rememberMe: boolean): ThunkAction<void, AppRootStateType, unknown, AuthActionTypes> =>
     (dispatch) => {
         authAPI.logIn(email, password, rememberMe).then(res => {
             if (res.data.resultCode === 0) {

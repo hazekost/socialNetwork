@@ -4,13 +4,14 @@ import { RouteComponentProps, withRouter } from "react-router"
 import { compose } from "redux"
 import { withAuthRedirect } from "../../hoc/withAuthRedirect"
 import { addPost, getUserProfile, getUserStatus, ProfilePageType, updateMyStatus } from "../../redux/profile-reducer"
-import { StateType } from "../../redux/redux-store"
+import { AppRootStateType } from "../../redux/redux-store"
 import { MyPost } from "./MyPost/MyPost"
 import s from "./ProfileContainer.module.css"
 import { ProfileInfo } from "./ProfileInfo/ProfileInfo"
 
 type ProfilePropsType = {
     state: ProfilePageType
+    authUserId: number | null
     addPost: (value: string) => void
     getUserProfile: (id: string) => void
     getUserStatus: (id: string) => void
@@ -25,7 +26,10 @@ class ProfileContainer extends React.Component<PropsType> {
     componentDidMount() {
         let userId = this.props.match.params.userId
         if (!userId) {
-            userId = "13123"
+            userId = String(this.props.authUserId)
+            if (userId) {
+                this.props.history.push("/login")
+            }
         }
         this.props.getUserProfile(userId)
         this.props.getUserStatus(userId)
@@ -41,9 +45,9 @@ class ProfileContainer extends React.Component<PropsType> {
     }
 }
 
-const mapStateToProps = (state: StateType): { state: ProfilePageType, isAuth: boolean } => ({
+const mapStateToProps = (state: AppRootStateType): { state: ProfilePageType, authUserId: number | null } => ({
     state: state.profilePage,
-    isAuth: state.auth.isAuth
+    authUserId: state.auth.id
 })
 
 export default compose<React.ComponentType>(
