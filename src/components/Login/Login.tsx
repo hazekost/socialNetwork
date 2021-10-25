@@ -72,6 +72,7 @@ type LoginPropsType = {
 }
 
 const Login: React.FC<LoginPropsType> = (props) => {
+
     const login = (email: string, password: string, rememberMe: boolean) => {
         props.login(email, password, rememberMe)
     }

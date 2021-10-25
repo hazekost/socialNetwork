@@ -1,3 +1,5 @@
+const ADD_MESSAGE = "dialogs/ADD_MESSAGE"
+
 type DialogType = {
     name: string
     id: number
@@ -10,7 +12,7 @@ export type MessagesPageType = {
     messages: Array<MessageType>
     dialogs: Array<DialogType>
 }
-type ActionType = AddMessageActionType
+type ActionType = ReturnType<typeof addMessage>
 
 let initialState = {
     messages: [
@@ -29,13 +31,11 @@ let initialState = {
 
 export const dialogsReducer = (state: MessagesPageType = initialState, action: ActionType): MessagesPageType => {
     switch (action.type) {
-        case "ADD-MESSAGE":
+        case ADD_MESSAGE:
             return { ...state, messages: [...state.messages, { message: action.message, id: 4 }] }
         default:
             return state
     }
 }
 
-type AddMessageActionType = ReturnType<typeof addMessage>
-
-export const addMessage = (message: string) => ({ type: "ADD-MESSAGE" as const, message })
+export const addMessage = (message: string) => ({ type: ADD_MESSAGE, message })

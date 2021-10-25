@@ -9,8 +9,10 @@ type MyPostPropsType = {
     addPost: (value: string) => void
 }
 
-export const MyPost: React.FC<MyPostPropsType> = (props) => {
+export const MyPost: React.FC<MyPostPropsType> = React.memo((props) => {
+
     const { state, addPost } = props
+
     return <div className={s.myPost}>
         <AddItemForm addItem={addPost} buttonName={"Add post"} />
         <div className={s.posts}>
@@ -19,4 +21,4 @@ export const MyPost: React.FC<MyPostPropsType> = (props) => {
             }
         </div>
     </div>
-}
+})

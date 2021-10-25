@@ -2,6 +2,7 @@ import s from "./Users.module.css"
 import avatar from "../../assets/avatar.jpg"
 import { NavLink } from "react-router-dom"
 import { ItemType } from "../../api/api"
+import { Paginator } from "./Paginator"
 
 type UsersPropsType = {
     totalCount: number
@@ -16,24 +17,14 @@ type UsersPropsType = {
 
 export const Users: React.FC<UsersPropsType> = (props) => {
 
-    let pagesCount = Math.ceil(props.totalCount / props.pageSize)
-    let pagesArray = []
-    for (let i = 1; i <= pagesCount; i++) {
-        pagesArray.push(i)
-    }
+    let { totalCount, pageSize, currentPage, items, followingInProgress, onPageChanged, follow, unFollow } = props
 
     return <div>
-        <div>
-            {pagesArray.map((p, i) => {
-                return <span key={i}
-                    onClick={() => props.onPageChanged(p)}
-                    className={props.currentPage === p ? s.selectedPage : ""}>{p} </span>
-            })}
-        </div>
-        {props.items.map(u => {
+        <Paginator currentPage={currentPage} pageSize={pageSize} totalCount={totalCount} onPageChanged={onPageChanged} />
+        {items.map(u => {
 
-            const follow = () => props.follow(u.id)
-            const unFollow = () => props.unFollow(u.id)
+            const followHandler = () => follow(u.id)
+            const unFollowHandler = () => unFollow(u.id)
 
             return <div key={u.id}>
                 <span>
@@ -45,8 +36,8 @@ export const Users: React.FC<UsersPropsType> = (props) => {
                     {u.name}
                 </span>
                 <div>
-                    {u.followed ? <button disabled={props.followingInProgress.some(id => id === u.id)} onClick={unFollow}>UnFollow</button>
-                        : <button disabled={props.followingInProgress.some(id => id === u.id)} onClick={follow}>Follow</button>}
+                    {u.followed ? <button disabled={followingInProgress.some(id => id === u.id)} onClick={unFollowHandler}>UnFollow</button>
+                        : <button disabled={followingInProgress.some(id => id === u.id)} onClick={followHandler}>Follow</button>}
                 </div>
             </div>
         })}
