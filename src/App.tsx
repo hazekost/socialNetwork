@@ -1,16 +1,18 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { connect } from "react-redux";
 import { Route } from "react-router-dom";
 import "./App.css";
 import { Preloader } from "./components/common/Preloader";
-import DialogsContainer from "./components/Dialogs/DialogsContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
-import Login from "./components/Login/Login";
 import { NavBar } from "./components/NavBar/NavBar";
 import ProfileContainer from "./components/Profile/ProfileContainer";
-import UsersContainer from "./components/Users/UsersContainer";
+import { withSuspense } from "./hoc/withSuspense";
 import { initializeAppTC } from "./redux/app-reducer";
 import { AppRootStateType } from "./redux/redux-store";
+
+const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
+const UsersContainer = React.lazy(() => import('./components/Users/UsersContainer'));
+const Login = React.lazy(() => import('./components/Login/Login'));
 
 type AppPropsType = {
   initialized: boolean
@@ -30,10 +32,14 @@ class App extends React.Component<AppPropsType> {
         <HeaderContainer />
         <NavBar />
         <div className="content">
-          <Route path="/messages" render={() => <DialogsContainer />} />
+          <Route path="/messages" render={() => {
+            return <Suspense fallback={"...Loading"}>
+              <DialogsContainer />
+            </Suspense>
+          }} />
           <Route path="/profile/:userId?" render={() => <ProfileContainer />} />
-          <Route path="/users" render={() => <UsersContainer />} />
-          <Route path="/login" render={() => <Login />} />
+          <Route path="/users" render={withSuspense(UsersContainer)} />
+          <Route path="/login" render={withSuspense(Login)} />
         </div>
       </div>
     );

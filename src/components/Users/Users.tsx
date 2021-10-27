@@ -20,7 +20,7 @@ export const Users: React.FC<UsersPropsType> = (props) => {
     let { totalCount, pageSize, currentPage, items, followingInProgress, onPageChanged, follow, unFollow } = props
 
     return <div>
-        <Paginator currentPage={currentPage} pageSize={pageSize} totalCount={totalCount} onPageChanged={onPageChanged} />
+        <Paginator currentPage={currentPage} pageSize={pageSize} totalCount={totalCount} portionSize={10} onPageChanged={onPageChanged} />
         {items.map(u => {
 
             const followHandler = () => follow(u.id)
