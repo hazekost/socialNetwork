@@ -33,10 +33,10 @@ export class UsersContainer extends React.Component<UsersPropsType> {
     render() {
         let { currentPage, items, pageSize, totalCount, isFetching, followingInProgress } = this.props.state
         return <>
-            {isFetching ? <Preloader />
-                : <Users currentPage={currentPage} items={items} pageSize={pageSize} totalCount={totalCount}
-                    followingInProgress={followingInProgress} onPageChanged={this.onPageChanged}
-                    follow={this.follow} unFollow={this.unFollow} />}
+            {isFetching && <Preloader />}
+            <Users currentPage={currentPage} items={items} pageSize={pageSize} totalCount={totalCount}
+                followingInProgress={followingInProgress} onPageChanged={this.onPageChanged}
+                follow={this.follow} unFollow={this.unFollow} />
         </>
     }
 }
