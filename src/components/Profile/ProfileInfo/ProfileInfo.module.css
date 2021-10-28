@@ -3,5 +3,9 @@
   }
   
 .description img {
-    width: 100px;
+    width: 200px;
   }
+
+.contact {
+  padding-left: 20px;
+}

@@ -2,11 +2,6 @@ import React from "react"
 import { useEffect, useState } from "react"
 import { ChangeEvent } from "react"
 
-type ProfileStatusPropsType = {
-    status: string
-    updateMyStatus: (status: string) => void
-}
-
 // export class ProfileStatus extends React.Component<ProfileStatusPropsType> {
 
 //     state = {
@@ -51,6 +46,11 @@ type ProfileStatusPropsType = {
 //     }
 // }
 
+type ProfileStatusPropsType = {
+    status: string
+    updateMyStatus: (status: string) => void
+}
+
 export const ProfileStatus: React.FC<ProfileStatusPropsType> = (props) => {
 
     let [editMode, setEditMode] = useState(false)
@@ -80,9 +80,9 @@ export const ProfileStatus: React.FC<ProfileStatusPropsType> = (props) => {
                     <input autoFocus onChange={onChangeHandler}
                         onBlur={deActivateEditMode} value={status} />
                 </div>
-                : <div onDoubleClick={activateEditMode}>
+                : <b><div onDoubleClick={activateEditMode}>
                     {props.status}
-                </div>
+                </div></b>
         }
     </>
 }

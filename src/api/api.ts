@@ -39,8 +39,25 @@ export type UserProfileType = {
     lookingForAJob: boolean
     lookingForAJobDescription: string
     fullName: string
-    userId: number
-    photos: { small: string, large: string }
+    userId: number | undefined
+    photos: { small: string | undefined, large: string | undefined }
+}
+
+export type ValuesType = {
+    fullName: string
+    aboutMe: string
+    lookingForAJob: boolean
+    lookingForAJobDescription: string
+    contacts: {
+        facebook: string;
+        website: string;
+        vk: string;
+        twitter: string;
+        instagram: string;
+        youtube: string;
+        github: string;
+        mainLink: string;
+    }
 }
 
 const instance = axios.create({
@@ -71,7 +88,15 @@ export const profileAPI = {
         return instance.get<string>(`profile/status/${id}`)
     },
     updateMyStatus(status: string) {
-        return instance.put<{}, AxiosResponse<ResponseType>>(`profile/status`, { status })
+        return instance.put<any, AxiosResponse<ResponseType>>(`profile/status`, { status })
+    },
+    savePhoto(image: File) {
+        const formData = new FormData()
+        formData.append("image", image)
+        return instance.put<any, AxiosResponse<ResponseType<{ photos: { small: string, large: string } }>>>(`profile/photo`, formData)
+    },
+    saveProfile(profile: ValuesType) {
+        return instance.put<ValuesType, AxiosResponse<ResponseType>>(`/profile`, profile)
     },
 }
 
@@ -80,7 +105,7 @@ export const usersAPI = {
         return instance.get<GetUsersResponseType>(`users?count=${pageSize}&page=${page}`)
     },
     follow(id: number) {
-        return instance.post<{}, AxiosResponse<ResponseType>>(`follow/${id}`)
+        return instance.post<any, AxiosResponse<ResponseType>>(`follow/${id}`)
     },
     unFollow(id: number) {
         return instance.delete<ResponseType>(`follow/${id}`)
