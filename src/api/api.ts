@@ -72,12 +72,18 @@ export const authAPI = {
     authMe() {
         return instance.get<AuthResponseType>(`auth/me`)
     },
-    logIn(email: string, password: string, rememberMe: boolean) {
-        return instance.post<{}, AxiosResponse<ResponseType<{ userId: number }>>>(`auth/login`, { email, password, rememberMe })
+    logIn(email: string, password: string, rememberMe: boolean, captcha?: string) {
+        return instance.post<{}, AxiosResponse<ResponseType<{ userId: number }>>>(`auth/login`, { email, password, rememberMe, captcha })
     },
     logOut() {
         return instance.delete<ResponseType>(`auth/login`)
     }
+}
+
+export const securityAPI = {
+    getCaptcha() {
+        return instance.get<{ url: string }>(`security/get-captcha-url`)
+    },
 }
 
 export const profileAPI = {

@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { connect } from "react-redux";
-import { Route } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import "./App.css";
 import { Preloader } from "./components/common/Preloader";
 import HeaderContainer from "./components/Header/HeaderContainer";
@@ -32,14 +32,19 @@ class App extends React.Component<AppPropsType> {
         <HeaderContainer />
         <NavBar />
         <div className="content">
-          <Route path="/messages" render={() => {
-            return <Suspense fallback={"...Loading"}>
-              <DialogsContainer />
-            </Suspense>
-          }} />
-          <Route path="/profile/:userId?" render={() => <ProfileContainer />} />
-          <Route path="/users" render={withSuspense(UsersContainer)} />
-          <Route path="/login" render={withSuspense(Login)} />
+          <Switch>
+            <Route exact path="/" render={() => <Redirect to={"/profile"} />} />
+            <Route path="/profile/:userId?" render={() => <ProfileContainer />} />
+            <Route path="/users" render={withSuspense(UsersContainer)} />
+            <Route path="/messages" render={() => {
+              return <Suspense fallback={"...Loading"}>
+                <DialogsContainer />
+              </Suspense>
+            }} />
+            <Route path="/login" render={withSuspense(Login)} />
+            <Route path="/404" render={() => <div>404 NOT FOUND</div>} />
+            <Redirect from="*" to="/404" />
+          </Switch>
         </div>
       </div>
     );

@@ -26,7 +26,8 @@ function validatePassword(value: string) {
 }
 
 type LoginFormPropsType = {
-    login: (email: string, password: string, rememberMe: boolean) => void
+    captcha: string | null
+    login: (email: string, password: string, rememberMe: boolean, captcha?: string) => void
 }
 
 const LoginForm: React.FC<LoginFormPropsType> = (props) => {
@@ -35,9 +36,10 @@ const LoginForm: React.FC<LoginFormPropsType> = (props) => {
             email: "",
             password: "",
             rememberMe: false,
+            captcha: ""
         }}
         onSubmit={(values, actions) => {
-            props.login(values.email, values.password, values.rememberMe)
+            props.login(values.email, values.password, values.rememberMe, values.captcha)
             actions.setSubmitting(false);
             return;
         }}>
@@ -58,6 +60,10 @@ const LoginForm: React.FC<LoginFormPropsType> = (props) => {
                         onChange={formik.handleChange} checked={formik.values.rememberMe} />
                     Remember me
                 </div>
+                {props.captcha && <img src={props.captcha} alt="" />}
+                {props.captcha && <div>
+                    <Field id="captcha" name="captcha" placeholder="Captcha" onChange={formik.handleChange} value={formik.values.captcha} />
+                </div>}
                 <div>
                     <button type="submit" disabled={false} >Submit</button>
                 </div>
@@ -68,25 +74,27 @@ const LoginForm: React.FC<LoginFormPropsType> = (props) => {
 
 type LoginPropsType = {
     isAuth: boolean
-    login: (email: string, password: string, rememberMe: boolean) => void
+    captchaUrl: string | null
+    login: (email: string, password: string, rememberMe: boolean, captcha?: string) => void
 }
 
 const Login: React.FC<LoginPropsType> = (props) => {
 
-    const login = (email: string, password: string, rememberMe: boolean) => {
-        props.login(email, password, rememberMe)
+    const login = (email: string, password: string, rememberMe: boolean, captcha?: string) => {
+        props.login(email, password, rememberMe, captcha)
     }
 
     if (props.isAuth) return <Redirect to={"/profile"} />
 
     return <div>
         <h1>Login</h1>
-        <LoginForm login={login} />
+        <LoginForm login={login} captcha={props.captchaUrl} />
     </div>
 }
 
 const mapStateToProps = (state: AppRootStateType) => ({
-    isAuth: state.auth.isAuth
+    isAuth: state.auth.isAuth,
+    captchaUrl: state.auth.captchaUrl
 })
 
 export default connect(mapStateToProps, { login })(Login)
