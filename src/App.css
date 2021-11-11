@@ -1,9 +1,15 @@
+.back-ground {
+  background-color: #313131;
+  min-height: 100vh;
+}
+
 .app-wrapper {
   display: grid;
   margin: auto;
   width: 1200px;
   grid-template-rows: 60px 1fr;
   grid-template-columns: 2fr 10fr;
+  grid-gap: 1em;
   grid-template-areas:
     "h h"
     "n m";
@@ -11,5 +17,6 @@
 
 .content {
   grid-area: m;
+  border-radius: 16px;
   background-color: teal;
 }

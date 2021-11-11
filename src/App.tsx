@@ -28,23 +28,25 @@ class App extends React.Component<AppPropsType> {
   render() {
     if (!this.props.initialized) return <Preloader />
     return (
-      <div className="app-wrapper">
-        <HeaderContainer />
-        <NavBar />
-        <div className="content">
-          <Switch>
-            <Route exact path="/" render={() => <Redirect to={"/profile"} />} />
-            <Route path="/profile/:userId?" render={() => <ProfileContainer />} />
-            <Route path="/users" render={withSuspense(UsersContainer)} />
-            <Route path="/messages" render={() => {
-              return <Suspense fallback={"...Loading"}>
-                <DialogsContainer />
-              </Suspense>
-            }} />
-            <Route path="/login" render={withSuspense(Login)} />
-            <Route path="/404" render={() => <div>404 NOT FOUND</div>} />
-            <Redirect from="*" to="/404" />
-          </Switch>
+      <div className="back-ground">
+        <div className="app-wrapper">
+          <HeaderContainer />
+          <NavBar />
+          <div className="content">
+            <Switch>
+              <Route exact path="/" render={() => <Redirect to={"/profile"} />} />
+              <Route path="/profile/:userId?" render={() => <ProfileContainer />} />
+              <Route path="/users" render={withSuspense(UsersContainer)} />
+              <Route path="/messages" render={() => {
+                return <Suspense fallback={"...Loading"}>
+                  <DialogsContainer />
+                </Suspense>
+              }} />
+              <Route path="/login" render={withSuspense(Login)} />
+              <Route path="/404" render={() => <div>404 NOT FOUND</div>} />
+              <Redirect from="*" to="/404" />
+            </Switch>
+          </div>
         </div>
       </div>
     );
